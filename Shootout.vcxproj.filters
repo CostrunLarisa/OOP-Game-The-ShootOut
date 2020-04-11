@@ -39,6 +39,15 @@
     <ClCompile Include="Hammers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StoneGloves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arma.h">
@@ -60,6 +69,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hammers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StoneGloves.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

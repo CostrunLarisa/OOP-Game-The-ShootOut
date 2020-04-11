@@ -4,6 +4,6 @@ class Guns :
 	virtual public Arma
 {
 public:
-	Guns();
+	Guns(int,int);
 };
 

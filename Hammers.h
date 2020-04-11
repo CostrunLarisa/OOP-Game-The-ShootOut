@@ -1,9 +1,9 @@
 #pragma once
 #include "Arma.h"
 class Hammers :
-	virtual public Arma
+	public Arma
 {
 public:
-	Hammers();
+	Hammers(int,int);
 };
 

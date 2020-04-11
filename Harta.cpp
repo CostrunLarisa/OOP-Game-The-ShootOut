@@ -2,6 +2,12 @@
 #include "Agent.h"
 #include "Arma.h"
 #include "Armuri.h"
+#include "Knives.h"
+#include "Hammers.h"
+#include "Guns.h"
+#include "Scut.h"
+#include "Cap.h"
+#include "StoneGloves.h"
 #include<vector>
 #include <cstdlib>
 #include<ctime>
@@ -28,33 +34,33 @@ Harta::Harta(int x,int y=2)
 		int option = rand() % 3 + 1;
 		if (option == 1)
 		{
-			Arma ar = new Guns(nr3, nr4);
-			weapons.push_back(ar);
+			Arma *ar = new Guns(nr3, nr4);
+			weapons.push_back(*ar);
 		}
 		else if (option == 2)
 		{
-			Arma ar = new Hammers(nr3, nr4);
-			weapons.push_back(ar);
+			Arma *ar = new Hammers(nr3, nr4);
+			weapons.push_back(*ar);
 		}
 		else
 		{
-			Arma ar = new Knives(nr3, nr4);
-			weapons.push_back(ar);
+			Arma *ar = new Knives(nr3, nr4);
+			weapons.push_back(*ar);
 		}
 		int option2 = rand() % 3 + 1;
 		if (option2 == 1)
 		{
-			Armuri arr = new Scut(nr5, nr6);
-			protection.push_back(arr);
+			Armuri *arr = new Scut(nr5, nr6);
+			protection.push_back(*arr);
 		}
 		else if(option2==1)
 		{
-			Armuri arr = new Cap(nr5, nr6);
-			protection.push_back(arr);
+			Armuri *arr = new Cap(nr5, nr6);
+			protection.push_back(*arr);
 		}
 		else {
-			Armuri arr = new StoneGloves(nr5, nr6);
-			protection.push_back(arr);
+			Armuri *arr = new StoneGloves(nr5, nr6);
+			protection.push_back(*arr);
 		}
 	}
 

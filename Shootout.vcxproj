@@ -150,20 +150,26 @@
     <ClCompile Include="Agent.cpp" />
     <ClCompile Include="Arma.cpp" />
     <ClCompile Include="Armuri.cpp" />
+    <ClCompile Include="Cap.cpp" />
     <ClCompile Include="Guns.cpp" />
     <ClCompile Include="Hammers.cpp" />
     <ClCompile Include="Harta.cpp" />
     <ClCompile Include="Knives.cpp" />
+    <ClCompile Include="Scut.cpp" />
     <ClCompile Include="Shootout.cpp" />
+    <ClCompile Include="StoneGloves.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Agent.h" />
     <ClInclude Include="Arma.h" />
     <ClInclude Include="Armuri.h" />
+    <ClInclude Include="Cap.h" />
     <ClInclude Include="Guns.h" />
     <ClInclude Include="Hammers.h" />
     <ClInclude Include="Harta.h" />
     <ClInclude Include="Knives.h" />
+    <ClInclude Include="Scut.h" />
+    <ClInclude Include="StoneGloves.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
