@@ -9,7 +9,6 @@ using namespace std;
 class Harta
 {
 private:
-	static int runda;
 	char** harta;
 	int nrAgents;
 	int nrWeapons;
@@ -28,11 +27,19 @@ public:
 	bool isFinal();					//metoda in care stabilim daca fiecare agent a facut o mutare
 	bool endGame();
 	void deleteItem(Harta&);
+	void changes();
+	void decreaseWeapons();
+	void decreaseProtection();
 	int getSize() const;
 	int getWeapons() const;
 	int getProtect() const;
 	int getAgents() const;
+	char getValue(int,int) const;
+	void setWeapons();
+	void setProtect();
+	void setAgents();
 	void configuration();
+	void setValue(int,int,char);
 	friend ostream& operator<<(ostream&,const Harta&);
 	friend class Armuri;
 	friend class Arma;

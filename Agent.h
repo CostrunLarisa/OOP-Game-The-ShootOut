@@ -1,6 +1,9 @@
 #ifndef _AGENT_H_
 #define _AGENT_H_
 #include<vector>
+#include "Harta.h"
+#include"Arma.h"
+#include "Armuri.h"
 #include<iostream>
 using namespace std;
 class Agent:public Harta
@@ -14,9 +17,11 @@ public:
 	Agent(int x=0,int y=0);
 	~Agent();
 	int getView();                  //returns the viewport
-	bool isFree(int,int);						//boolean method which tells us wether or not we have another Agent with the given position:x,y nearby
-	Agent changePosition(Agent&);		//method for changing the position
+	bool isFree(int,int,Harta);						//boolean method which tells us wether or not we have another Agent with the given position:x,y nearby
+	Agent& changePosition(Harta);		//method for changing the position
 	void afisare();
+	int getX() const;
+	int getY() const;
 };
 
 #endif

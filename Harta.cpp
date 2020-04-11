@@ -9,11 +9,11 @@
 #include "Cap.h"
 #include "StoneGloves.h"
 #include<vector>
+#include<string>
 #include <cstdlib>
 #include<ctime>
 #include <iostream>
 using namespace std;
-int Harta::runda = 0;
 
 Harta::Harta(int x,int y=2)
 {
@@ -78,19 +78,13 @@ Harta::Harta(int x,int y=2)
 
 }
 
-void Harta::AgentMoves()
-{
-	for (auto elem: Harta::agent)
-	{
-		int arie = elem.getView();
-	}
-}
-void Harta::show()
-{
-	for(int i=0;i<)
-}
+
 void Harta::configuration()
 {
+	for (auto elem : Harta::agent)
+	{
+		elem.changePosition(harta&);
+	}
 	for (int i = 0; i < agent.size(); i++)
 	{
 		cout << "Agent" <<i+1<<":";
@@ -99,20 +93,48 @@ void Harta::configuration()
 	for(int i=0;i<weapons.size();i++)
 	for(int i=0;i<protection.size();i++)
 }
-
+void Harta::setWeapons()
+{
+	nrWeapons = weapons.size();
+}
+void Harta::setProtect()
+{
+	nrProtect = protection.size();
+}
+void Harta::setAgents()
+{
+	nrAgents = agent.size();
+}
+void Harta::setValue(int x, int y, string a)
+{
+	harta[x][y] = a;
+}
 int Harta::getSize() const
 {
 	return limitX;
 }
 int Harta::getWeapons() const
 {
-	return weapons.size();
+	return nrWeapons;
 }
 int Harta::getProtect() const
 {
-	return protection.size();
+	return nrProtect;
 }
 int Harta::getAgents() const
 {
-	return agent.size();
+	return nrAgents;
+}
+char Harta::getValue(int i,int j) const
+{
+	return harta[i][j];
+}
+void Harta::show()
+{
+	for (int i = 0; i < limitX; i++)
+	{
+		for (int j = 0; j < limitX; i++)
+			cout << harta[i][j];
+		cout << endl;
+	}
 }

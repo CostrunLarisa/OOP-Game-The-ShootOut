@@ -1,0 +1,11 @@
+
+.vs/Shootout/v16/.suo
+*.opendb
+*.idb
+*.lastbuildstate
+*.tlog
+*.ipch
+*.db
+*.obj
+*.log
+*.pdb
