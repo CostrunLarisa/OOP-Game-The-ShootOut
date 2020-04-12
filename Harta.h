@@ -15,7 +15,7 @@ private:
 	int nrProtect;
 	int limitX;
 	int limitY;
-	vector<Agent> agent;
+	vector<Agent*> agent;
 	vector<Arma*> weapons;
 	vector<Armuri*> protection;
 public:

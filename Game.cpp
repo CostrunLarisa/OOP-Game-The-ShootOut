@@ -56,3 +56,10 @@ void Game::StartGame()
 		}
 	}
 }
+
+Game::~Game()
+{
+	Rounds = 0;
+	currentRound = 0;
+	cout << "Game OVER!Exit.";
+}

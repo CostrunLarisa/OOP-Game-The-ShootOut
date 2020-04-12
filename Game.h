@@ -7,6 +7,7 @@ private:
 	static int currentRound;
 public:
 	void StartGame();
+	~Game();
 };
 #endif
 

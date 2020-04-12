@@ -35,7 +35,7 @@ Harta::Harta(int x,int y)
 		int five = rand() % (limitX-1);
 		int six = rand() % (limitY-1);
 		Agent* a = new Agent(first,second);
-		agent.push_back(*a);
+		agent.push_back(a);
 		harta[first][second] = 'Agnt';
 		int option = rand() % 3 + 1;
 		if (option == 1)
@@ -82,7 +82,7 @@ void Harta::deleteAgent(int x, int y)
 {
 	for (int i=0;i<agent.size();i++)
 	{
-		if (agent[i].getX() == x && agent[i].getY() == y)agent.erase(i + agent.begin());
+		if (agent[i]->getX() == x && agent[i]->getY() == y)agent.erase(i + agent.begin());
 	}
 }
 void Harta::collectWeapon(Agent &a,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
@@ -123,7 +123,7 @@ void Harta::configuration()
 {
 	for (auto elem : agent)
 	{
-		elem.changePosition(*this);
+		elem->changePosition(*this);
 	}
 }
 void Harta::setWeapons()
@@ -170,4 +170,30 @@ void Harta::show()
 			cout << harta[i][j];
 		cout << endl;
 	}
+}
+
+Harta::~Harta()
+{
+	for (int i = 0; i < limitX; i++)
+		delete harta[i];
+	delete harta;
+	if (getAgents() > 0)
+	{
+		for (int i = 0; i < agent.size(); i++)
+			agent.erase(i + agent.begin());
+	}
+	if (getWeapons() > 0)
+	{
+		for (int i = 0; i < weapons.size(); i++)
+			weapons.erase(i + weapons.begin());
+	}
+	if (getProtect() > 0)
+	{
+		for (int i = 0; i < protection.size(); i++)
+			protection.erase(i + protection.begin());
+	}
+	nrAgents = 0;
+	nrWeapons = 0;
+	nrProtect = 0;
+	limitX = limitY = 0;
 }
