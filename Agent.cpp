@@ -30,8 +30,8 @@ bool Agent::isFree(int x, int y, Harta h)
 	for (int i = x; i <= limit1; i++)
 		for (int j = y; j <= limit2; j++)
 			if (h.getValue(i,j) == 'Agnt' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
-	int limit1 = x - arie;
-	int limit2 = y - arie;
+	limit1 = x - arie;
+	limit2 = y - arie;
 	if (limit1 < 0)limit1 = 0;		
 	if (limit2 < 0)limit2 = 0;
 	for(int i=limit1;i>=0;i--)
@@ -40,7 +40,7 @@ bool Agent::isFree(int x, int y, Harta h)
 
 	return 0;
 }
-Agent& Agent::changePosition(Harta &h)
+void Agent::changePosition(Harta &h)
 {
 	int nr1 = this->getX();		//we get the position where our Agent is
 	int nr2 = this->getY();
@@ -91,14 +91,14 @@ Agent& Agent::changePosition(Harta &h)
 				if (select1 > nr1)arie += (select1 - nr1);
 				else if (select1 < nr1)arie -= (nr1 - select1);
 				else if (select2 > nr2)arie += (select2 - nr2);
-				else if (select2 < nr2)arie - +(nr2 - select2);		//we change the value depending on our agent move;if he moves back it's viewport decreases,otherwise it increases;
+				else if (select2 < nr2)arie -=(nr2 - select2);		//we change the value depending on our agent move;if he moves back it's viewport decreases,otherwise it increases;
 				if (arie < 0)arie = 0;
 				if (arie >= n)arie = n - 1;
 			}
 		else if (h.getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
 			cout << "Agent from position" << select1 << "," << select2 << " has collected the object:";
-			h.collectWeapon(this, select1, select2);
+			h.collectWeapon(*this, select1, select2);
 			cout<< "!";
 		}
 

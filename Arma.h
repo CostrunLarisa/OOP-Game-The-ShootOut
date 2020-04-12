@@ -9,7 +9,6 @@ public:
 	virtual void afis() = 0;
 	int getX() const;
 	int getY() const;
-	friend class Harta;
-	friend class Agent;
+
 };
 #endif

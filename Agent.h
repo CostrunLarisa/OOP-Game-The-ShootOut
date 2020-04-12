@@ -20,7 +20,7 @@ public:
 	~Agent();
 	int getView();                  //returns the viewport
 	bool isFree(int,int,Harta);						//boolean method which tells us wether or not we have another Agent with the given position:x,y nearby
-	Agent& changePosition(Harta&);		//method for changing the position
+	void changePosition(Harta&);		//method for changing the position
 	void chargeWeapon(Arma* a);
 	void chargeDefWeapon(Armuri* a);
 	void attack();

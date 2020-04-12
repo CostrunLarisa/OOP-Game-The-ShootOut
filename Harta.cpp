@@ -15,7 +15,7 @@
 #include <iostream>
 using namespace std;
 
-Harta::Harta(int x,int y=2)
+Harta::Harta(int x,int y)
 {
 	limitX = x;		
 	limitY = y;
@@ -28,50 +28,50 @@ Harta::Harta(int x,int y=2)
 	srand((unsigned)time(0));			//vrem sa generam un numar random diferit de fiecare data pentru pozitiile agentilor
 	for (int i = 0; i < limitX/8; i++)		//vrem sa populam aproximativ un sfert de harta
 	{
-		int nr1 = rand() % (limitX-1);
-		int nr2 = rand() % (limitY-1);	//incerc sa ma asigur ca pozitiile nu se repeta i.e nu vom avea doua obiecte pe aceeasi pozitie
-		int nr3 = rand() % (limitX-1);
-		int nr4 = rand() % (limitY-1);
-		int nr5 = rand() % (limitX-1);
-		int nr6 = rand() % (limitY-1);
-		Agent* a = new Agent(nr1,nr2);
+		int first = rand() % (limitX-1);
+		int second = rand() % (limitY-1);	//incerc sa ma asigur ca pozitiile nu se repeta i.e nu vom avea doua obiecte pe aceeasi pozitie
+		int third = rand() % (limitX-1);
+		int four = rand() % (limitY-1);
+		int five = rand() % (limitX-1);
+		int six = rand() % (limitY-1);
+		Agent* a = new Agent(first,second);
 		agent.push_back(*a);
-		harta[nr1][nr2] = 'Agnt';
+		harta[first][second] = 'Agnt';
 		int option = rand() % 3 + 1;
 		if (option == 1)
 		{
-			Guns *ar = new Guns(nr3, nr4);
+			Guns *ar = new Guns(third,four);
 			weapons.push_back(ar);
-			harta[nr3][nr4] = 'Gun';
+			harta[third][four] = 'Gun';
 		}
 		else if (option == 2)
 		{
-			Hammers *ar = new Hammers(nr3, nr4);
+			Hammers *ar = new Hammers(third, four);
 			weapons.push_back(ar);
-			harta[nr3][nr4] = 'Ham';
+			harta[third][four] = 'Ham';
 		}
 		else
 		{
-			Knives *ar = new Knives(nr3, nr4);
+			Knives *ar = new Knives(third,four);
 			weapons.push_back(ar);
-			harta[nr3][nr4] = 'Knf';
+			harta[third][four] = 'Knf';
 		}
 		int option2 = rand() % 3 + 1;
 		if (option2 == 1)
 		{
-			Scut *arr = new Scut(nr5, nr6);
-			harta[nr5][nr6] = 'Scut';
+			Scut *arr = new Scut(five,six);
+			harta[five][six] = 'Scut';
 			protection.push_back(arr);
 		}
 		else if(option2==1)
 		{
-			Cap *arr = new Cap(nr5, nr6);
-			harta[nr5][nr6] = 'Cap';
+			Cap *arr = new Cap(five,six);
+			harta[five][six] = 'Cap';
 			protection.push_back(arr);
 		}
 		else {
-			StoneGloves *arr = new StoneGloves(nr5, nr6);
-			harta[nr5][nr6] = 'Glv';
+			StoneGloves *arr = new StoneGloves(five,six);
+			harta[five][six] = 'Glv';
 			protection.push_back(arr);
 		}
 	}
@@ -138,7 +138,7 @@ void Harta::setAgents()
 {
 	nrAgents = agent.size();
 }
-void Harta::setValue(int x, int y, char a)
+void Harta::setValue(int x, int y, int a)
 {
 	harta[x][y] = a;
 }

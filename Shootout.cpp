@@ -1,11 +1,12 @@
 // Shootout.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#include "Harta.h"
+#include "Game.h"
 #include <iostream>
 using namespace std;
 int main()
 {
-	Harta h(25, 25);
+	Game game;
+	game.StartGame();
 	return 0;
 }
 

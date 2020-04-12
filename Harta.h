@@ -1,6 +1,6 @@
 #ifndef _HARTA_H_
 #define _HARTA_H_
-
+#include "Agent.h"
 #include<vector>
 #include <iostream>
 
@@ -41,10 +41,8 @@ public:
 	void setProtect();
 	void setAgents();
 	void configuration();
-	void setValue(int,int,char);
+	void setValue(int,int,int);
 	friend ostream& operator<<(ostream&,const Harta&);
-	friend class Agent;
-	friend class Armuri;
-	friend class Arma;
+
 };
 #endif
