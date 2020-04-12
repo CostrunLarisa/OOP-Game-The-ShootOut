@@ -1,4 +1,5 @@
 #include "Agent.h"
+#include "Harta.h"
 #include "Arma.h"
 #include "Armuri.h"
 #include "Knives.h"
@@ -10,12 +11,13 @@
 using namespace std;
 
 int Agent::arie = 2;
+
 Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 {
-	Arma* ar = new Knives(this->pozitieOx, this->pozitieOy);	//we want to start the game with each agent having the same tools															
-	weapon.push_back(*ar);										//hence each object of Agent class will have a weapon-object of type Knives,and a self-defense weapon of type Cap
-	Armuri* arr = new Cap(this->pozitieOx, this->pozitieOy);
-	protect.push_back(*arr);
+	Knives* ar = new Knives(this->pozitieOx, this->pozitieOy);	//we want to start the game with each agent having the same tools															
+	weapon.push_back(ar);										//hence each object of Agent class will have a weapon-object of type Knives,and a self-defense weapon of type Cap
+	Cap* arr = new Cap(this->pozitieOx, this->pozitieOy);
+	protect.push_back(arr);
 }
 
 bool Agent::isFree(int x, int y, Harta h)
@@ -38,7 +40,7 @@ bool Agent::isFree(int x, int y, Harta h)
 
 	return 0;
 }
-Agent& Agent::changePosition(Harta& h)
+Agent& Agent::changePosition(Harta &h)
 {
 	int nr1 = this->getX();		//we get the position where our Agent is
 	int nr2 = this->getY();
@@ -95,14 +97,28 @@ Agent& Agent::changePosition(Harta& h)
 			}
 		else if (h.getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
-
+			cout << "Agent from position" << select1 << "," << select2 << " has collected the object:";
+			h.collectWeapon(this, select1, select2);
+			cout<< "!";
 		}
 
 	}
-	else {																		//else he attacks
+	else {
+		this->attack();																	//else he attacks
 	}
 }
+void Agent::chargeWeapon(Arma* a)
+{
 
+}
+void Agent::chargeDefWeapon(Armuri* a)
+{
+
+}
+void Agent::attack()
+{
+
+}
 int Agent::getX() const {
 	return pozitieOx;
 }
@@ -112,8 +128,4 @@ int Agent::getY() const{
 int Agent::getView()
 {
 	return arie;
-}
-void Agent::afisare()
-{
-
 }

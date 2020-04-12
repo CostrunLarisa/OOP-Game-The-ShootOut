@@ -151,6 +151,7 @@
     <ClCompile Include="Arma.cpp" />
     <ClCompile Include="Armuri.cpp" />
     <ClCompile Include="Cap.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Guns.cpp" />
     <ClCompile Include="Hammers.cpp" />
     <ClCompile Include="Harta.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Arma.h" />
     <ClInclude Include="Armuri.h" />
     <ClInclude Include="Cap.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Guns.h" />
     <ClInclude Include="Hammers.h" />
     <ClInclude Include="Harta.h" />

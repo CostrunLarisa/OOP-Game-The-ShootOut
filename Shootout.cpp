@@ -6,15 +6,6 @@ using namespace std;
 int main()
 {
 	Harta h(25, 25);
-	int limitX, limitY;
-	cin >> limitX;
-	cin >> limitY;
-	
-	while (true)
-	{int nr1 = rand() % (limitX / 2);
-	int nr2 = (rand() % limitY + (limitY / 2));
-	cout << nr1 << " " << nr2;
-	}
 	return 0;
 }
 

@@ -1,9 +1,12 @@
-#pragma once
+#ifndef HAMMERS_H
+#define HAMMERS_H
 #include "Arma.h"
-class Hammers :
-	public Arma
+#include "Harta.h"
+#include "Agent.h"
+class Hammers :virtual public Arma
 {
 public:
 	Hammers(int,int);
+	virtual void afis();
 };
-
+#endif

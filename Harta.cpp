@@ -40,39 +40,39 @@ Harta::Harta(int x,int y=2)
 		int option = rand() % 3 + 1;
 		if (option == 1)
 		{
-			Arma *ar = new Guns(nr3, nr4);
-			weapons.push_back(*ar);
+			Guns *ar = new Guns(nr3, nr4);
+			weapons.push_back(ar);
 			harta[nr3][nr4] = 'Gun';
 		}
 		else if (option == 2)
 		{
-			Arma *ar = new Hammers(nr3, nr4);
-			weapons.push_back(*ar);
+			Hammers *ar = new Hammers(nr3, nr4);
+			weapons.push_back(ar);
 			harta[nr3][nr4] = 'Ham';
 		}
 		else
 		{
-			Arma *ar = new Knives(nr3, nr4);
-			weapons.push_back(*ar);
+			Knives *ar = new Knives(nr3, nr4);
+			weapons.push_back(ar);
 			harta[nr3][nr4] = 'Knf';
 		}
 		int option2 = rand() % 3 + 1;
 		if (option2 == 1)
 		{
-			Armuri *arr = new Scut(nr5, nr6);
+			Scut *arr = new Scut(nr5, nr6);
 			harta[nr5][nr6] = 'Scut';
-			protection.push_back(*arr);
+			protection.push_back(arr);
 		}
 		else if(option2==1)
 		{
-			Armuri *arr = new Cap(nr5, nr6);
+			Cap *arr = new Cap(nr5, nr6);
 			harta[nr5][nr6] = 'Cap';
-			protection.push_back(*arr);
+			protection.push_back(arr);
 		}
 		else {
-			Armuri *arr = new StoneGloves(nr5, nr6);
+			StoneGloves *arr = new StoneGloves(nr5, nr6);
 			harta[nr5][nr6] = 'Glv';
-			protection.push_back(*arr);
+			protection.push_back(arr);
 		}
 	}
 
@@ -85,20 +85,46 @@ void Harta::deleteAgent(int x, int y)
 		if (agent[i].getX() == x && agent[i].getY() == y)agent.erase(i + agent.begin());
 	}
 }
-
+void Harta::collectWeapon(Agent &a,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
+{
+	try {
+		int ok = 0;
+		for (int i = 0; i < weapons.size();i++)
+			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
+			{
+				harta[x][y] = '*';
+				weapons[i]->afis();
+				a.chargeWeapon(weapons[i]);
+				weapons.erase(i + weapons.begin());
+				ok = 1;
+				setWeapons();
+				cout << "There are only " << getWeapons() << "  weapons left on the map!"<<endl;
+			}
+		
+		if(ok==0)throw false;
+	}
+	catch (...)
+	{
+		for (int i = 0; i < protection.size(); i++)
+		{
+			if (protection[i]->getX() == x && protection[i]->getY() == y)
+			{
+				harta[x][y] = '*';
+				Armuri* g = (Armuri*)protection[i];			//downcast thanks to Bogdan's tutorials,hope I'll remember to delete this before sending it
+				a.chargeDefWeapon(protection[i]);
+				protection.erase(i + protection.begin());
+				setProtect();
+				cout << "There are only " << getProtect() << " self-defense weapons left on the map!"<<endl;
+			}
+		}
+	}
+}
 void Harta::configuration()
 {
-	for (auto elem : Harta::agent)
+	for (auto elem : agent)
 	{
-		elem.changePosition(harta&);
+		elem.changePosition(*this);
 	}
-	for (int i = 0; i < agent.size(); i++)
-	{
-		cout << "Agent" <<i+1<<":";
-		agent[i].afisare();
-	}
-	for(int i=0;i<weapons.size();i++)
-	for(int i=0;i<protection.size();i++)
 }
 void Harta::setWeapons()
 {
