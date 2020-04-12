@@ -51,6 +51,7 @@ Agent& Agent::changePosition(Harta& h)
 		cout << "Unfortunately,he will die :(" << endl;
 		cout << "There are only " << h.getAgents() - 1 << " agents left!";
 		h.deleteAgent(nr1,nr2);
+		h.setAgents();
 	}
 	if (isFree(nr1, nr2, h) == 0)			//we search if there is another Agent
 	{
