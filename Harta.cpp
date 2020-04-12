@@ -78,6 +78,13 @@ Harta::Harta(int x,int y=2)
 
 }
 
+void Harta::deleteAgent(int x, int y)
+{
+	for (int i=0;i<agent.size();i++)
+	{
+		if (agent[i].getX() == x && agent[i].getY() == y)agent.erase(i + agent.begin());
+	}
+}
 
 void Harta::configuration()
 {
@@ -105,7 +112,7 @@ void Harta::setAgents()
 {
 	nrAgents = agent.size();
 }
-void Harta::setValue(int x, int y, string a)
+void Harta::setValue(int x, int y, char a)
 {
 	harta[x][y] = a;
 }

@@ -30,6 +30,7 @@ public:
 	void changes();
 	void decreaseWeapons();
 	void decreaseProtection();
+	void deleteAgent(int,int);
 	int getSize() const;
 	int getWeapons() const;
 	int getProtect() const;
