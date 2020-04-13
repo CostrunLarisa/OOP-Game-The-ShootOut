@@ -12,19 +12,29 @@ void Scut::afisare()
 {
 	cout << "scut";
 }
-void Scut::shoot(Guns g)
+void Scut::shootG(Arma* g)
 {
-	cout << "Oh no!!The StoneGloves gave been activated!The enemy stands no chances in winning" << endl;
-	cout << "This combination is LETAL!!!! ^o^" << endl;
+	cout << "SCUT ACTIVATED!" << endl;
+	cout << "Scut and ";
+	g->afis();
+	cout << ", I'd better watch out!";
+	cout << "This time the scut has recovered from the damages and it's ready to hurt the enemy while protecting!" << endl;
 }
 
-void Scut::shoot(Knives k)
+void Scut::shootK(Arma* k)
 {
-	cout << "The agent has only a knife and a cap, unfortunately he can't attack with this combination. :(" << endl;
-	cout << "But thanks to the cap,he won't die." << endl;
+	cout << "SCUT ACTIVATED!" << endl;
+	cout << "Scut and ";
+	k->afis();
+	cout << "!"<<endl;
+	cout << "Unfortunately,this combination just protects him!" << endl;
 }
 
-void Scut::shoot(Hammers h)
+void Scut::shootH(Arma* h)
 {
+	cout << "SCUT ACTIVATED!" << endl;
+	cout << "Scut and ";
+	h->afis();
+	cout << ", I'd better watch out!"<<endl;
 	cout << "Yees! It looks like somebody it's safe from the guns." << endl;
 }

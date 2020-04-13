@@ -16,10 +16,10 @@ class Armuri
 public:
 	Armuri(int x=0, int y=0);
 	virtual void afisare() = 0;
-	virtual void shoot(Guns) = 0;		//we create virtual method for the attack,depending oh the parameters wich method"shoot" will receive
+	virtual void shootG(Arma*) = 0;		//we create virtual method for the attack,depending oh the parameters wich method"shoot" will receive
 										//the current weapon will shoot differently
-	virtual void shoot(Knives) = 0;
-	virtual void shoot(Hammers) = 0;
+	virtual void shootK(Arma*) = 0;
+	virtual void shootH(Arma*) = 0;
 	int getX() const;
 	int getY() const;
 };

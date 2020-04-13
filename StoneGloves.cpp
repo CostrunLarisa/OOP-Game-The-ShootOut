@@ -13,19 +13,30 @@ void StoneGloves::afisare()
 	cout << "stone gloves";
 }
 
-void StoneGloves::shoot(Guns g)
+void StoneGloves::shootG(Arma* g)
 {
+	cout << "STONE GLOVES ACTIVATED" << endl;
+	cout << "Stonne Gloves and ";
+	g->afis();
+	cout << "!" << endl;
 	cout << "Oh no!!The StoneGloves have been activated!The enemy stands no chances in winning" << endl;
 	cout << "This combination is LETAL!!!! ^o^" << endl;
 }
 
-void StoneGloves::shoot(Hammers h)
+void StoneGloves::shootH(Arma* h)
 {
-	cout << "The agent has only a knife and a cap, unfortunately he can't attack with this combination. :(" << endl;
-	cout << "But thanks to the cap,he won't die." << endl;
+	cout << "STONE GLOVES ACTIVATED" << endl;
+	cout << "Stone Gloves and ";
+	h->afis();
+	cout<< ", I'd better watch out!";
+	cout << "This will empower the shoot!" << endl;
 }
 
-void StoneGloves::shoot(Knives k)
+void StoneGloves::shootK(Arma* k)
 {
-	cout << "Yees! It looks like somebody it's safe from the guns." << endl;
+	cout << "STONE GLOVES ACTIVATED" << endl;
+	cout << "Oh,man!" << endl;
+	cout << "Stonne Gloves and ";
+	k->afis();
+	cout << ", I'd better watch out!This combination is just frizzing the enemy!"<<endl;
 }

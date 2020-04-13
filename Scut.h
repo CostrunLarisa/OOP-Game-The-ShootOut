@@ -16,9 +16,9 @@ class Scut :
 public:
 	Scut(int, int);
 	virtual void afisare();
-	virtual void shoot(Guns);
-	virtual void shoot(Hammers);
-	virtual void shoot(Knives);
+	virtual void shootG(Arma*);
+	virtual void shootH(Arma*);
+	virtual void shootK(Arma*);
 };
 
 #endif

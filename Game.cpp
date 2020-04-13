@@ -18,11 +18,12 @@ int Game::Rounds = 0;
 void Game::StartGame()
 {
 	
-	Harta h(25, 25);
+	Harta h(12,12);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
 	Rounds = nr;int ok = 1;
+	cout << h << endl;
 	while (h.getAgents() > 0 && ok==1)
 	{
 		while (currentRound < Rounds && h.getAgents()>1)
@@ -58,7 +59,6 @@ void Game::StartGame()
 				}
 			break;
 			}
-			break;
 		}
 		else if (h.getAgents() == 1)
 		{

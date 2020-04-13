@@ -99,8 +99,8 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 				cout << "Agent from position" << x << "," << y << " has collected the weapon:";
 				weapons[i]->afis();
 				cout << "!";
-				cout << "He has now:" << agent[i]->getWeapons() << " weapons." << endl;
 				agent[i]->chargeWeapon(weapons[i]);
+				cout << "He has now:" << agent[i]->getWeapons() << " weapons." << endl;
 				weapons.erase(i + weapons.begin());
 				ok = 1;
 				setWeapons();
@@ -122,8 +122,8 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 				cout<<"Agent from position" << x << ", " << y << " has collected the self-defense weapon : ";
 				protection[i]->afisare();
 				cout << "!"<<endl;
-				cout << "He has now:" << agent[i]->getSFWeapons() << " self-defense weapons." << endl;
 				agent[i]->chargeDefWeapon(protection[i]);
+				cout << "He has now:" << agent[i]->getSFWeapons() << " self-defense weapons." << endl;
 				protection.erase(i + protection.begin());
 				setProtect();
 				cout << "There are only " << getProtect() << " self-defense weapons left on the map!"<<endl;
@@ -342,7 +342,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				{
 					agent[i]->attack();
 					harta[l][j] = '*';
+					cout << "Hahaha,it seems like the agent from " << l << "," << j << " didn't pay attention to who was around him,so he DIED in the game!" << endl;
+					cout << "Agent from position " << agent[i]->getX() << "," << agent[i]->getY() << " killed him!" << endl;
 					deleteAgent(l , j);
+					setAgents();
+					cout << "There are only: " << getAgents() << " left!" << endl;
 					ok = 0;
 				}
 		if (ok == 0)
@@ -358,7 +362,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 					{
 						agent[i]->attack();
 						harta[l][j] = '*';
+						cout << "Hahaha,it seems like the agent from " << l << "," << j << " didn't pay attention to who was around him,so he DIED in the game!" << endl;
+						cout << "Agent from position " << agent[i]->getX() << "," << agent[i]->getY() << " killed him!" << endl;
 						deleteAgent(l, j);
+						setAgents();
+						cout << "There are only: " << getAgents() << " left!" << endl;
 					}
 		}
 	}

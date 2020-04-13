@@ -31,14 +31,19 @@ void Agent::chargeDefWeapon(Armuri* a)
 }
 void Agent::attack()
 {
+	srand((unsigned)time(0));
 	int option = rand() % getWeapons();
+	cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
 		Arma* b = (Arma*)weapon[option];
-
 		if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
 		{
 			int secondop = rand() % getSFWeapons();
+			int choose = (rand() % 3) + 1;
 			Armuri* a = (Armuri*)protect[secondop];
-			//a->shoot(*b);				//downcasting,not working
+			if(choose==1)a->shootG(b);
+			else if(choose==2)a->shootK(b);
+			else a->shootH(b);
+						//downcasting,not working
 		}
 		else { b->shootW(); }			//downcasting
 }
@@ -55,6 +60,7 @@ void Agent::setY(int y)
 {
 	pozitieOy = y;
 }
+
 int Agent::getWeapons()
 {
 	int nr = 0;

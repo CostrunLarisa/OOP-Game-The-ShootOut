@@ -12,19 +12,29 @@ void Cap::afisare()
 {
 	cout << "cap";
 }
-void Cap::shoot(Guns g)
+void Cap::shootG(Arma* g)
 {
-	cout << "Oh no!!The StoneGloves gave been activated!The enemy stands no chances in winning" << endl;
-	cout << "This combination is LETAL!!!! ^o^" << endl;
+	cout << "CAP ACTIVATED!" << endl;
+	cout << "Cap and ";
+	g->afis();
+	cout << ", I'd better watch out!"<<endl;
+	cout << " With this combination,the agent is invincible AND he can kill!" << endl;
 }
 
-void Cap::shoot(Knives k)
+void Cap::shootK(Arma* k)
 {
-	cout << "The agent has only a knife and a cap, unfortunately he can't attack with this combination. :(" << endl;
-	cout << "But thanks to the cap,he won't die." << endl;
+	cout << "CAP ACTIVATED!" << endl;
+	cout << "Cap and ";
+	k->afis();
+	cout << "!"<<endl;
+	cout << "Unfortunately,the cap protects him,but isn't allowing him to give a LETAL shoot." << endl;
 }
 
-void Cap::shoot(Hammers h)
+void Cap::shootH(Arma* h)
 {
-	cout << "Yees! It looks like somebody it's safe from the guns." << endl;
+	cout << "CAP ACTIVATED!" << endl;
+	cout << "Cap and ";
+	h->afis();
+	cout << ", I'd better watch out!"<<endl;
+	cout << "Our agent isn't lucky today...the cap just protects him" << endl;
 }
