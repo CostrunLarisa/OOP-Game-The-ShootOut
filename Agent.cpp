@@ -17,7 +17,6 @@ Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 	weapon.push_back(ar);										//hence each object of Agent class will have a weapon-object of type Knives,and a self-defense weapon of type Cap
 	Cap* arr = new Cap(this->pozitieOx, this->pozitieOy);
 	protect.push_back(arr);
-	arie = 2;
 }
 
 
@@ -48,10 +47,7 @@ void Agent::attack()
 		else { b->shootW(); }			//downcasting
 }
 
-void Agent::setArie(int x)
-{
-	arie = x;
-}
+
 void Agent::setX(int x)
 {
 	pozitieOx = x;
