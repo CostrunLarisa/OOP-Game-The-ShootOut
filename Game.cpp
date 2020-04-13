@@ -1,13 +1,23 @@
 #include "Game.h"
 #include "Harta.h"
+#include "Agent.h"
+#include "Arma.h"
+#include "Armuri.h"
+#include "Knives.h"
+#include "Hammers.h"
+#include "Guns.h"
+#include "Scut.h"
+#include "Cap.h"
+#include "StoneGloves.h"
 #include<iostream>
-#include<string>
+
 using namespace std;
 int Game::currentRound = 0;
 int Game::Rounds = 0;
 
 void Game::StartGame()
 {
+	
 	Harta h(25, 25);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;

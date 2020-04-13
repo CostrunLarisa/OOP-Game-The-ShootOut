@@ -3,11 +3,11 @@
 
 #include "Arma.h"
 #include "Armuri.h"
-#include "Harta.h"
-#include<vector>
+#include <vector>
 #pragma once
 using namespace std;
-
+class Arma;
+class Armuri;
 class Agent
 {
 	static int arie;        //an agent can see with maximum 2 positions ahead N,S,E,V
@@ -19,11 +19,12 @@ public:
 	Agent(int x=0,int y=0);
 	//~Agent();
 	int getView();                  //returns the viewport
-	bool isFree(int,int,Harta);						//boolean method which tells us wether or not we have another Agent with the given position:x,y nearby
-	void changePosition(Harta& h);		//method for changing the position
-	void chargeWeapon(Arma*);
-	void chargeDefWeapon(Armuri*);
-	void attack(Harta&);
+	void chargeWeapon(Arma* a);
+	void chargeDefWeapon(Armuri* a);
+	void attack();
+	void setArie(int x);
+	void setX(int x);
+	void setY(int y);
 	int getWeapons();
 	int getSFWeapons();
 	int getX() const;

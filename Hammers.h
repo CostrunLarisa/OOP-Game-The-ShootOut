@@ -3,7 +3,9 @@
 #include "Arma.h"
 #include "Harta.h"
 #include "Agent.h"
-class Hammers :public Arma
+
+class Arma;
+class Hammers :virtual public Arma
 {
 public:
 	Hammers(int,int);

@@ -3,6 +3,12 @@
 #include "Guns.h"
 #include "Knives.h"
 #include "Hammers.h"
+
+
+class Guns;
+class Hammers;
+class Knives;
+
 class Armuri
 {
 	int poz1;

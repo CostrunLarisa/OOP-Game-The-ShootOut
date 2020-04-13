@@ -25,6 +25,8 @@ Harta::Harta(int x,int y)
 	for (int i = 0; i < limitX; i++)
 		for (int j = 0; j < limitX; i++)
 			harta[i][j] = '*';
+	
+
 	srand((unsigned)time(0));			//vrem sa generam un numar random diferit de fiecare data pentru pozitiile agentilor
 	for (int i = 0; i < limitX/8; i++)		//vrem sa populam aproximativ un sfert de harta
 	{
@@ -85,7 +87,7 @@ void Harta::deleteAgent(int x, int y)
 		if (agent[i]->getX() == x && agent[i]->getY() == y)agent.erase(i + agent.begin());
 	}
 }
-void Harta::collectWeapon(Agent& a,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
+void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
 {
 	try {
 		int ok = 0;
@@ -96,8 +98,8 @@ void Harta::collectWeapon(Agent& a,int x, int y)		//this method collects the wea
 				cout << "Agent from position" << x << "," << y << " has collected the weapon:";
 				weapons[i]->afis();
 				cout << "!";
-				cout << "He has now:" << a.getWeapons() << " weapons." << endl;
-				a.chargeWeapon(weapons[i]);
+				cout << "He has now:" << agent[i]->getWeapons() << " weapons." << endl;
+				agent[i]->chargeWeapon(weapons[i]);
 				weapons.erase(i + weapons.begin());
 				ok = 1;
 				setWeapons();
@@ -120,8 +122,8 @@ void Harta::collectWeapon(Agent& a,int x, int y)		//this method collects the wea
 				cout<<"Agent from position" << x << ", " << y << " has collected the self-defense weapon : ";
 				protection[i]->afisare();
 				cout << "!";
-				cout << "He has now:" << a.getSFWeapons() << " self-defense weapons." << endl;
-				a.chargeDefWeapon(protection[i]);
+				cout << "He has now:" << agent[i]->getSFWeapons() << " self-defense weapons." << endl;
+				agent[i]->chargeDefWeapon(protection[i]);
 				protection.erase(i + protection.begin());
 				setProtect();
 				cout << "There are only " << getProtect() << " self-defense weapons left on the map!"<<endl;
@@ -131,9 +133,9 @@ void Harta::collectWeapon(Agent& a,int x, int y)		//this method collects the wea
 }
 void Harta::configuration()
 {
-	for (auto elem : agent)
+	for (int i=0;i<agent.size();i++)
 	{
-		changePosition(elem);
+		changePosition(agent[i]->getX(), agent[i]->getY(),i);
 	}
 }
 
@@ -173,8 +175,19 @@ char Harta::getValue(int i,int j) const
 {
 	return harta[i][j];
 }
+ostream& operator<<(ostream& out, const Harta& h) {
+	for (int i = 0; i < h.getSize(); i++) {
+		for (int j = 0; j < h.getSize(); j++)
+			out << h.harta[i][j] << " ";
+		out << '\n';
+	}
+	out << '\n';
+	return out;
+}
+
 void Harta::show()
 {
+	
 	for (int i = 0; i < limitX; i++)
 	{
 		for (int j = 0; j < limitX; i++)
@@ -208,43 +221,44 @@ Harta::~Harta()
 	nrProtect = 0;
 	limitX = limitY = 0;
 }
-bool Agent::isFree(int x, int y, Harta h)
+bool Harta::isFree(int x, int y,int i)
 {
-	int n = h.getSize();
+	int n = getSize();
+	int arie = agent[i]->getView();
 	int limit1 = x + arie;
 	if (limit1 >= n)limit1 = n - 1;				//we check if our viewport doesn't cross the map
 	int limit2 = y + arie;
 	if (limit2 >= n)limit2 = n - 1;
 	for (int i = x; i <= limit1; i++)
 		for (int j = y; j <= limit2; j++)
-			if (h.getValue(i, j) == 'A' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
+			if (getValue(i, j) == 'A' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
 	limit1 = x - arie;
 	limit2 = y - arie;
 	if (limit1 < 0)limit1 = 0;
 	if (limit2 < 0)limit2 = 0;
 	for (int i = limit1; i >= 0; i--)
 		for (int j = limit2; j >= 0; j--)
-			if (h.getValue(i, j) == 'A' && (i != x || j != y))return 1;
+			if (getValue(i, j) == 'A' && (i != x || j != y))return 1;
 
 	return 0;
 }
-void Harta::changePosition(Agent* elem)
+
+void Harta::changePosition(int nr1,int nr2,int i)
 {
-	int nr1 = elem->getX();		//we get the position where our Agent is
-	int nr2 = elem->getY();
-	int n = harta.getSize();
-	int arie = elem.getView();
-	if (arie == 0 && isFree(nr1, nr2) == 1)
+	
+	int n = getSize();
+	int arie = agent[i]->getView();
+	if (arie == 0 && isFree(nr1, nr2, i) == 1)
 	{
 		cout << "Oh,no!The agent from position:" << nr1 << "," << nr2 << " cannot move!" << endl;
 		cout << "It seems like our agent wasn't in good shape today...He can't see around him." << endl;
 		cout << "And he is in danger!Other agents are around him!" << endl;
 		cout << "Unfortunately,he will die :(" << endl;
-		cout << "There are only " << harta.getAgents() - 1 << " agents left!";
-		harta.deleteAgent(nr1, nr2);
-		harta.setAgents();
+		cout << "There are only " << getAgents() - 1 << " agents left!";
+		deleteAgent(nr1, nr2);
+		setAgents();
 	}
-	else if (isFree(nr1, nr2, h) == 0)			//we search if there is another Agent
+	else if (isFree(nr1, nr2, i) == 0)			//we search if there is another Agent
 	{
 		int value1 = nr1 + arie;
 		if (value1 >= n)value1 = n - 1;
@@ -270,27 +284,83 @@ void Harta::changePosition(Agent* elem)
 			if (select2 == nr2)select2 = (rand() % value2) + value4;
 			select1 = nr1;
 		}
-		if (h.getValue(select1, select2) == '*')			//if no one is there,the Agent moves
+		if (getValue(select1, select2) == '*')			//if no one is there,the Agent moves
 		{
-			h.setValue(nr1, nr2, '*');
-			h.setValue(select1, select2, 'A');
+			setValue(nr1, nr2, '*');
+			setValue(select1, select2, 'A');
 			cout << "Agent from position" << nr1 << "," << nr2 << " has moved to position" << select1 << "," << select2;
-			elem.setX(select1);
-			elem.setY(select2);
-			if (select1 > nr1)arie += (select1 - nr1);
-			else if (select1 < nr1)arie -= (nr1 - select1);
-			else if (select2 > nr2)arie += (select2 - nr2);
-			else if (select2 < nr2)arie -= (nr2 - select2);		//we change the value depending on our agent move;if he moves back it's viewport decreases,otherwise it increases;
-			if (arie < 0)arie = 0;
-			if (arie >= n)arie = n - 1;
+			agent[i]->setX(select1);
+			agent[i]->setY(select2);
+			if (select1 > nr1)
+			{
+				arie += (select1 - nr1);
+				agent[i]->setArie(arie);
+			}
+			else if (select1 < nr1)
+			{
+				arie -= (nr1 - select1);
+				agent[i]->setArie(arie);
+			}
+			else if (select2 > nr2)
+			{
+				arie += (select2 - nr2);
+				agent[i]->setArie(arie);
+			}
+			else if (select2 < nr2)
+			{
+				arie -= (nr2 - select2);		//we change the value depending on our agent move;if he moves back it's viewport decreases,otherwise it increases;
+				agent[i]->setArie(arie);
+			}
+			if (arie < 0)
+			{
+				arie = 0;
+				agent[i]->setArie(arie);
+			}
+			if (arie >= n)
+			{
+				arie = n - 1;
+				agent[i]->setArie(arie);
+			}
 		}
-		else if (h.getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
+		else if (getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
-			h.collectWeapon(*this, select1, select2);
+			collectWeapon(i, select1, select2);
 		}
 
 	}
 	else {
-		this->attack(h);																	//else he attacks
+		int n = getSize();
+		int ok = 1;
+		int arie = agent[i]->getView();
+		int limit1 = agent[i]->getX() + arie;
+		if (limit1 >= n)limit1 = n - 1;
+		int limit2 = agent[i]->getY() + arie;
+		if (limit2 >= n)limit2 = n - 1;
+		int l = agent[i]->getX();
+		for (l ; l <= limit1; l++)
+			for (int j = agent[i]->getY(); j <= limit2; j++)
+				if (getValue(l, j) == 'A' && (l != agent[i]->getX() || j != agent[i]->getY()))
+				{
+					agent[i]->attack();
+					harta[l][j] = '*';
+					deleteAgent(l , j);
+					ok = 0;
+				}
+		if (ok == 0)
+		{
+
+			limit1 = agent[i]->getX() - arie;
+			limit2 = agent[i]->getY() - arie;
+			if (limit1 < 0)limit1 = 0;
+			if (limit2 < 0)limit2 = 0;
+			for (int l = limit1; l >= 0; l--)
+				for (int j = limit2; j >= 0; j--)
+					if (getValue(l, j) == 'A' && (l != agent[i]->getX() || j != agent[i]->getY()))
+					{
+						agent[i]->attack();
+						harta[l][j] = '*';
+						deleteAgent(l, j);
+					}
+		}
 	}
 }

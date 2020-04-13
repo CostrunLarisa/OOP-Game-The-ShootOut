@@ -1,7 +1,7 @@
 #ifndef GUNS_H
 #define GUNS_H
 #include "Arma.h"
-
+class Arma;
 class Guns : public Arma
 {
 public:

@@ -3,6 +3,7 @@
 #include "Arma.h"
 #include "Harta.h"
 #include "Agent.h"
+class Arma;
 class Knives : public Arma
 {
 public:

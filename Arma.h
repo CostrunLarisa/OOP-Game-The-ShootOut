@@ -1,8 +1,6 @@
 #ifndef ARMA_H
 #define ARMA_H
-#include "StoneGloves.h"
-#include "Cap.h"
-#include "Scut.h"
+
 class Arma
 {	int pozX;
 	int pozY;

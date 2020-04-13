@@ -6,6 +6,10 @@
 #include "Guns.h"
 #include "Hammers.h"
 #include "Knives.h"
+class Guns;
+class Hammers;
+class Knives;
+class Armuri;
 class StoneGloves :
 	virtual public Armuri
 {
