@@ -15,70 +15,71 @@
 #include <iostream>
 using namespace std;
 
-Harta::Harta(int x,int y)
+Harta::Harta(int x,int y):limitX(x),limitY(y)
 {
-	limitX = x;		
-	limitY = y;
 	harta = new char* [limitX];
 	for (int i = 0; i < limitX; i++)
 		harta[i] = new char[limitX];
 	for (int i = 0; i < limitX; i++)
-		for (int j = 0; j < limitX; i++)
+		for (int j = 0; j < limitX; j++)
+		{
 			harta[i][j] = '*';
-	
-
+		}
 	srand((unsigned)time(0));			//vrem sa generam un numar random diferit de fiecare data pentru pozitiile agentilor
-	for (int i = 0; i < limitX/8; i++)		//vrem sa populam aproximativ un sfert de harta
+	for (int i = 0; i < limitX / 2; i++)		//vrem sa populam aproximativ un sfert de harta
 	{
-		int first = rand() % (limitX-1);
-		int second = rand() % (limitY-1);	//incerc sa ma asigur ca pozitiile nu se repeta i.e nu vom avea doua obiecte pe aceeasi pozitie
-		int third = rand() % (limitX-1);
-		int four = rand() % (limitY-1);
-		int five = rand() % (limitX-1);
-		int six = rand() % (limitY-1);
-		Agent* a = new Agent(first,second);
+		int first = rand() % (limitX - 1);
+		int second = rand() % (limitY - 1);	//incerc sa ma asigur ca pozitiile nu se repeta i.e nu vom avea doua obiecte pe aceeasi pozitie
+		int third = rand() % (limitX - 1);
+		int four = rand() % (limitY - 1);
+		int five = rand() % (limitX - 1);
+		int six = rand() % (limitY - 1);
+		Agent* a = new Agent(first, second);
 		agent.push_back(a);
 		harta[first][second] = 'A';
 		int option = rand() % 3 + 1;
 		if (option == 1)
 		{
-			Guns *ar = new Guns(third,four);
+			Guns* ar = new Guns(third, four);
 			weapons.push_back(ar);
 			harta[third][four] = 'G';
 		}
 		else if (option == 2)
 		{
-			Hammers *ar = new Hammers(third, four);
+			Hammers* ar = new Hammers(third, four);
 			weapons.push_back(ar);
 			harta[third][four] = 'H';
 		}
 		else
 		{
-			Knives *ar = new Knives(third,four);
+			Knives* ar = new Knives(third, four);
 			weapons.push_back(ar);
 			harta[third][four] = 'K';
 		}
 		int option2 = rand() % 3 + 1;
 		if (option2 == 1)
 		{
-			Scut *arr = new Scut(five,six);
+			Scut* arr = new Scut(five, six);
 			harta[five][six] = 'S';
 			protection.push_back(arr);
 		}
-		else if(option2==1)
+		else if (option2 == 1)
 		{
-			Cap *arr = new Cap(five,six);
+			Cap* arr = new Cap(five, six);
 			harta[five][six] = 'C';
 			protection.push_back(arr);
 		}
 		else {
-			StoneGloves *arr = new StoneGloves(five,six);
+			StoneGloves* arr = new StoneGloves(five, six);
 			harta[five][six] = 'G';
 			protection.push_back(arr);
 		}
+		setAgents();
+		setProtect();
+		setWeapons();
 	}
-
 }
+
 
 void Harta::deleteAgent(int x, int y)
 {
@@ -117,11 +118,10 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 			if (protection[i]->getX() == x && protection[i]->getY() == y)
 			{
 				harta[x][y] = '*';
-				//Armuri* g = (Armuri*)protection[i];			//downcast thanks to Bogdan's tutorials,hope I'll remember to delete this before sending it
 				cout << "Houurray!" << endl;
 				cout<<"Agent from position" << x << ", " << y << " has collected the self-defense weapon : ";
 				protection[i]->afisare();
-				cout << "!";
+				cout << "!"<<endl;
 				cout << "He has now:" << agent[i]->getSFWeapons() << " self-defense weapons." << endl;
 				agent[i]->chargeDefWeapon(protection[i]);
 				protection.erase(i + protection.begin());
@@ -187,10 +187,9 @@ ostream& operator<<(ostream& out, const Harta& h) {
 
 void Harta::show()
 {
-	
 	for (int i = 0; i < limitX; i++)
 	{
-		for (int j = 0; j < limitX; i++)
+		for (int j = 0; j < limitX; j++)
 			cout << harta[i][j];
 		cout << endl;
 	}
@@ -250,11 +249,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 	int arie = agent[i]->getView();
 	if (arie == 0 && isFree(nr1, nr2, i) == 1)
 	{
-		cout << "Oh,no!The agent from position:" << nr1 << "," << nr2 << " cannot move!" << endl;
+		cout << "Oh,no!The agent from position: " << nr1 << "," << nr2 << " cannot move!" << endl;
 		cout << "It seems like our agent wasn't in good shape today...He can't see around him." << endl;
 		cout << "And he is in danger!Other agents are around him!" << endl;
 		cout << "Unfortunately,he will die :(" << endl;
-		cout << "There are only " << getAgents() - 1 << " agents left!";
+		cout << "There are only " << getAgents() - 1 << " agents left!"<<endl;
 		deleteAgent(nr1, nr2);
 		setAgents();
 	}
@@ -288,7 +287,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		{
 			setValue(nr1, nr2, '*');
 			setValue(select1, select2, 'A');
-			cout << "Agent from position" << nr1 << "," << nr2 << " has moved to position" << select1 << "," << select2;
+			cout << "Agent from position " << nr1 << "," << nr2 << " has moved to position" << select1 << "," << select2<<endl;
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
 			if (select1 > nr1)

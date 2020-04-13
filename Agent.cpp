@@ -11,14 +11,13 @@
 #include<ctime>
 using namespace std;
 
-int Agent::arie = 2;
-
 Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 {
 	Knives* ar = new Knives(this->pozitieOx, this->pozitieOy);	//we want to start the game with each agent having the same tools															
 	weapon.push_back(ar);										//hence each object of Agent class will have a weapon-object of type Knives,and a self-defense weapon of type Cap
 	Cap* arr = new Cap(this->pozitieOx, this->pozitieOy);
 	protect.push_back(arr);
+	arie = 2;
 }
 
 

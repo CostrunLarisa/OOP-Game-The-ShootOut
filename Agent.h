@@ -10,7 +10,7 @@ class Arma;
 class Armuri;
 class Agent
 {
-	static int arie;        //an agent can see with maximum 2 positions ahead N,S,E,V
+	int arie;        //an agent can see with maximum 2 positions ahead N,S,E,V
 	int pozitieOx;
 	int pozitieOy;
 	vector<Arma*> weapon;	//we use a vector,due to the fact that each Agent can collect weapons and self-defense weapons during the game

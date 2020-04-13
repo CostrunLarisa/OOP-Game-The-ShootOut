@@ -22,15 +22,17 @@ void Game::StartGame()
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
-	Rounds = nr;
-	while (h.getAgents() > 0)
+	Rounds = nr;int ok = 1;
+	while (h.getAgents() > 0 && ok==1)
 	{
 		while (currentRound < Rounds && h.getAgents()>1)
 		{
 			currentRound++;
-			cout << "---ROUND" << " " << currentRound << "---";
+			
+			cout << "---ROUND" << " " << currentRound << "---"<<endl;
 			h.configuration();
-			h.show();
+			cout<<h;
+			cout<<endl;
 		}
 		if (h.getAgents() > 1)
 		{
@@ -39,27 +41,29 @@ void Game::StartGame()
 			cin >> answer;
 			switch (answer)
 			{
-			case 1:
-			{
-				int nr;
-				cout << "Insert the number of rounds you want the game to run:";
-				cin >> nr;
-				Rounds = nr;
-				currentRound = 0;
-				break;
-			}
-			case 0:
-			{
-				cout << "Oh,noo! You've stopped the game! :(";
-				break;
-			}
+				case 1:
+				{
+					int nr;
+					cout << "Insert the number of rounds you want the game to run:";
+					cin >> nr;
+					Rounds = nr;
+					currentRound += nr;
+					break;
+				}
+				case 0:
+				{
+					cout << "Oh,noo! You've stopped the game! :("<<endl; 
+					ok = 0;
+					break;
+				}
 			break;
 			}
+			break;
 		}
 		else if (h.getAgents() == 1)
 		{
 			cout << "End Game!"<<endl;
-			h.show();
+			cout<<h;
 			break;
 		}
 	}
