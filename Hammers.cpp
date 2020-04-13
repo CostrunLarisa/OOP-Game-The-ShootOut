@@ -8,3 +8,11 @@ void Hammers::afis()
 {
 	cout << "hammer";
 }
+
+void Hammers::shootW()
+{
+	cout << "Hammer Activated!" << endl;
+	cout << "Hm..." << endl;
+	cout << "This weapon is like throwing with a flower." << endl;
+	cout << "But it will be useful for keeping the agent alive!" << endl;
+}

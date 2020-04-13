@@ -4,6 +4,8 @@
 #include "Armuri.h"
 #include "Knives.h"
 #include "Cap.h"
+#include "StoneGloves.h"
+#include "Scut.h"
 #include<vector>
 #include<iostream>
 #include <cstdlib>
@@ -29,14 +31,14 @@ bool Agent::isFree(int x, int y, Harta h)
 	if (limit2 >= n)limit2 = n - 1;
 	for (int i = x; i <= limit1; i++)
 		for (int j = y; j <= limit2; j++)
-			if (h.getValue(i,j) == 'Agnt' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
+			if (h.getValue(i,j) == 'A' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
 	limit1 = x - arie;
 	limit2 = y - arie;
 	if (limit1 < 0)limit1 = 0;		
 	if (limit2 < 0)limit2 = 0;
 	for(int i=limit1;i>=0;i--)
 		for(int j=limit2;j>=0;j--)
-			if (h.getValue(i,j) == 'Agnt' && (i != x || j != y))return 1;
+			if (h.getValue(i,j) == 'A' && (i != x || j != y))return 1;
 
 	return 0;
 }
@@ -55,7 +57,7 @@ void Agent::changePosition(Harta &h)
 		h.deleteAgent(nr1,nr2);
 		h.setAgents();
 	}
-	if (isFree(nr1, nr2, h) == 0)			//we search if there is another Agent
+	else if (isFree(nr1, nr2, h) == 0)			//we search if there is another Agent
 	{
 		int value1 = nr1 + arie;
 		if (value1 >= n)value1 = n - 1;
@@ -84,7 +86,7 @@ void Agent::changePosition(Harta &h)
 		if (h.getValue(select1,select2) =='*')			//if no one is there,the Agent moves
 			{
 				h.setValue(nr1, nr2, '*');
-				h.setValue(select1, select2, 'Agnt');
+				h.setValue(select1, select2, 'A');
 				cout << "Agent from position" << nr1 << "," << nr2 << " has moved to position" << select1 << "," << select2;
 				this->pozitieOx = select1;
 				this->pozitieOy = select2;
@@ -97,27 +99,95 @@ void Agent::changePosition(Harta &h)
 			}
 		else if (h.getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
-			cout << "Agent from position" << select1 << "," << select2 << " has collected the object:";
 			h.collectWeapon(*this, select1, select2);
-			cout<< "!";
 		}
 
 	}
 	else {
-		this->attack();																	//else he attacks
+		this->attack(h);																	//else he attacks
 	}
 }
 void Agent::chargeWeapon(Arma* a)
 {
-
+	weapon.push_back(a);
 }
 void Agent::chargeDefWeapon(Armuri* a)
 {
-
+	protect.push_back(a);
 }
-void Agent::attack()
+void Agent::attack(Harta &h)
 {
+	int ok = 1;
+	int x = this->getX();		//we get the position where our Agent is
+	int y = this->getY();
+	srand((unsigned)time(0));
+	int n = h.getSize();
+	int limit1 = x + arie;
+	if (limit1 >= n)limit1 = n - 1;				//we check if our viewport doesn't cross the map
+	int limit2 = y + arie;
+	if (limit2 >= n)limit2 = n - 1;
+	for (int i = x; i <= limit1; i++)
+		for (int j = y; j <= limit2; j++)
+			if (h.getValue(i, j) == 'A' && (i != x || j != y))	//if there is any Agent,then our current object cannot move
+			{
+				if (this->getWeapons() > 0)
+				{
+					int option = rand() % getWeapons();
+					Arma* b=(Arma*)weapon[option];
 
+					if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+					{
+						int secondop = rand() % getSFWeapons();
+						Armuri* a = (Armuri*)protect[secondop];
+						 //a->shoot(*b);				//downcasting,not working
+					}
+					else { b->shootW(); }			//downcasting
+				}
+				h.setValue(i, j, '*');				//if the enemy is killed,we delete it from the map;replace 'A' with '*'
+				h.deleteAgent(i, j);
+				ok = 0;
+			}
+	if (ok == 1)
+	{
+		limit1 = x - arie;
+		limit2 = y - arie;							//now we search for enemies behind 
+		if (limit1 < 0)limit1 = 0;
+		if (limit2 < 0)limit2 = 0;
+		for (int i = limit1; i >= 0; i--)
+			for (int j = limit2; j >= 0; j--)
+				if (h.getValue(i, j) == 'A' && (i != x || j != y))
+				{
+					if (this->getWeapons() > 0)
+					{
+						int option = rand() % getWeapons();
+						Arma* b = (Arma*)weapon[option];
+
+						if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+						{
+							int secondop = rand() % getSFWeapons();
+							Armuri* a = (Armuri*)protect[secondop];
+							//a->shoot(weapon[option]);
+						}
+						else { b->shootW(); }
+					}
+					h.setValue(i, j, '*');				//if the enemy is killed,we delete it from the map;replace 'A' with '*'
+					h.deleteAgent(i, j);
+				}
+	}
+}
+int Agent::getWeapons()
+{
+	int nr = 0;
+	for (int i = 0; i < weapon.size(); i++)
+		nr++;
+	return nr;
+}
+int Agent::getSFWeapons()
+{
+	int nr = 0;
+	for (int i = 0; i < protect.size(); i++)
+		nr++;
+	return nr;
 }
 int Agent::getX() const {
 	return pozitieOx;

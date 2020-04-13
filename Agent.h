@@ -1,11 +1,11 @@
 #ifndef AGENT_H
 #define AGENT_H
-#include<vector>
+
 #include "Arma.h"
 #include "Armuri.h"
 #include "Harta.h"
-#include<iostream>
-#pragma
+#include<vector>
+#pragma once
 using namespace std;
 
 class Agent
@@ -17,13 +17,15 @@ class Agent
 	vector<Armuri*> protect;  
 public:
 	Agent(int x=0,int y=0);
-	~Agent();
+	//~Agent();
 	int getView();                  //returns the viewport
 	bool isFree(int,int,Harta);						//boolean method which tells us wether or not we have another Agent with the given position:x,y nearby
-	void changePosition(Harta&);		//method for changing the position
-	void chargeWeapon(Arma* a);
-	void chargeDefWeapon(Armuri* a);
-	void attack();
+	void changePosition(Harta& h);		//method for changing the position
+	void chargeWeapon(Arma*);
+	void chargeDefWeapon(Armuri*);
+	void attack(Harta&);
+	int getWeapons();
+	int getSFWeapons();
 	int getX() const;
 	int getY() const;
 };

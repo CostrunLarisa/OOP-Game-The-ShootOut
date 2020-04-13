@@ -8,3 +8,10 @@ void Knives::afis()
 {
 	cout << "knife";
 }
+
+void Knives::shootW()
+{
+	cout << "Knife Activated!This weapon keeps you alive,but doesn't kill!" << endl;
+}
+
+

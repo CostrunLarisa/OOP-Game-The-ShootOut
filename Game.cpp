@@ -21,7 +21,6 @@ void Game::StartGame()
 			cout << "---ROUND" << " " << currentRound << "---";
 			h.configuration();
 			h.show();
-			h.changes();
 		}
 		if (h.getAgents() > 1)
 		{
@@ -51,7 +50,6 @@ void Game::StartGame()
 		{
 			cout << "End Game!"<<endl;
 			h.show();
-			h.changes();
 			break;
 		}
 	}

@@ -36,42 +36,42 @@ Harta::Harta(int x,int y)
 		int six = rand() % (limitY-1);
 		Agent* a = new Agent(first,second);
 		agent.push_back(a);
-		harta[first][second] = 'Agnt';
+		harta[first][second] = 'A';
 		int option = rand() % 3 + 1;
 		if (option == 1)
 		{
 			Guns *ar = new Guns(third,four);
 			weapons.push_back(ar);
-			harta[third][four] = 'Gun';
+			harta[third][four] = 'G';
 		}
 		else if (option == 2)
 		{
 			Hammers *ar = new Hammers(third, four);
 			weapons.push_back(ar);
-			harta[third][four] = 'Ham';
+			harta[third][four] = 'H';
 		}
 		else
 		{
 			Knives *ar = new Knives(third,four);
 			weapons.push_back(ar);
-			harta[third][four] = 'Knf';
+			harta[third][four] = 'K';
 		}
 		int option2 = rand() % 3 + 1;
 		if (option2 == 1)
 		{
 			Scut *arr = new Scut(five,six);
-			harta[five][six] = 'Scut';
+			harta[five][six] = 'S';
 			protection.push_back(arr);
 		}
 		else if(option2==1)
 		{
 			Cap *arr = new Cap(five,six);
-			harta[five][six] = 'Cap';
+			harta[five][six] = 'C';
 			protection.push_back(arr);
 		}
 		else {
 			StoneGloves *arr = new StoneGloves(five,six);
-			harta[five][six] = 'Glv';
+			harta[five][six] = 'G';
 			protection.push_back(arr);
 		}
 	}
@@ -85,7 +85,7 @@ void Harta::deleteAgent(int x, int y)
 		if (agent[i]->getX() == x && agent[i]->getY() == y)agent.erase(i + agent.begin());
 	}
 }
-void Harta::collectWeapon(Agent &a,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
+void Harta::collectWeapon(Agent& a,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
 {
 	try {
 		int ok = 0;
@@ -93,12 +93,17 @@ void Harta::collectWeapon(Agent &a,int x, int y)		//this method collects the wea
 			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
 			{
 				harta[x][y] = '*';
+				cout << "Agent from position" << x << "," << y << " has collected the weapon:";
 				weapons[i]->afis();
+				cout << "!";
+				cout << "He has now:" << a.getWeapons() << " weapons." << endl;
 				a.chargeWeapon(weapons[i]);
 				weapons.erase(i + weapons.begin());
 				ok = 1;
 				setWeapons();
-				cout << "There are only " << getWeapons() << "  weapons left on the map!"<<endl;
+				cout << "There are only " << getWeapons() << "  weapons left to be found on the map!"<<endl;
+				cout << "Who's gonna find them?" << endl;
+				cout << "...Mistery..." << endl;
 			}
 		
 		if(ok==0)throw false;
@@ -110,7 +115,12 @@ void Harta::collectWeapon(Agent &a,int x, int y)		//this method collects the wea
 			if (protection[i]->getX() == x && protection[i]->getY() == y)
 			{
 				harta[x][y] = '*';
-				Armuri* g = (Armuri*)protection[i];			//downcast thanks to Bogdan's tutorials,hope I'll remember to delete this before sending it
+				//Armuri* g = (Armuri*)protection[i];			//downcast thanks to Bogdan's tutorials,hope I'll remember to delete this before sending it
+				cout << "Houurray!" << endl;
+				cout<<"Agent from position" << x << ", " << y << " has collected the self-defense weapon : ";
+				protection[i]->afisare();
+				cout << "!";
+				cout << "He has now:" << a.getSFWeapons() << " self-defense weapons." << endl;
 				a.chargeDefWeapon(protection[i]);
 				protection.erase(i + protection.begin());
 				setProtect();
@@ -123,22 +133,23 @@ void Harta::configuration()
 {
 	for (auto elem : agent)
 	{
-		elem->changePosition(*this);
+		changePosition(elem);
 	}
 }
+
 void Harta::setWeapons()
 {
-	nrWeapons = weapons.size();
+	for (nrWeapons = 0; nrWeapons < weapons.size(); nrWeapons++);
 }
 void Harta::setProtect()
 {
-	nrProtect = protection.size();
+	for (nrProtect = 0; nrProtect < protection.size(); nrProtect++);
 }
 void Harta::setAgents()
 {
-	nrAgents = agent.size();
+	for (nrAgents = 0; nrAgents < agent.size(); nrAgents++);
 }
-void Harta::setValue(int x, int y, int a)
+void Harta::setValue(int x, int y, char a)
 {
 	harta[x][y] = a;
 }
@@ -196,4 +207,90 @@ Harta::~Harta()
 	nrWeapons = 0;
 	nrProtect = 0;
 	limitX = limitY = 0;
+}
+bool Agent::isFree(int x, int y, Harta h)
+{
+	int n = h.getSize();
+	int limit1 = x + arie;
+	if (limit1 >= n)limit1 = n - 1;				//we check if our viewport doesn't cross the map
+	int limit2 = y + arie;
+	if (limit2 >= n)limit2 = n - 1;
+	for (int i = x; i <= limit1; i++)
+		for (int j = y; j <= limit2; j++)
+			if (h.getValue(i, j) == 'A' && (i != x || j != y))return 1;	//if there is any Agent,then our current object cannot move
+	limit1 = x - arie;
+	limit2 = y - arie;
+	if (limit1 < 0)limit1 = 0;
+	if (limit2 < 0)limit2 = 0;
+	for (int i = limit1; i >= 0; i--)
+		for (int j = limit2; j >= 0; j--)
+			if (h.getValue(i, j) == 'A' && (i != x || j != y))return 1;
+
+	return 0;
+}
+void Harta::changePosition(Agent* elem)
+{
+	int nr1 = elem->getX();		//we get the position where our Agent is
+	int nr2 = elem->getY();
+	int n = harta.getSize();
+	int arie = elem.getView();
+	if (arie == 0 && isFree(nr1, nr2) == 1)
+	{
+		cout << "Oh,no!The agent from position:" << nr1 << "," << nr2 << " cannot move!" << endl;
+		cout << "It seems like our agent wasn't in good shape today...He can't see around him." << endl;
+		cout << "And he is in danger!Other agents are around him!" << endl;
+		cout << "Unfortunately,he will die :(" << endl;
+		cout << "There are only " << harta.getAgents() - 1 << " agents left!";
+		harta.deleteAgent(nr1, nr2);
+		harta.setAgents();
+	}
+	else if (isFree(nr1, nr2, h) == 0)			//we search if there is another Agent
+	{
+		int value1 = nr1 + arie;
+		if (value1 >= n)value1 = n - 1;
+		int value2 = nr2 + arie;
+		if (value2 >= n)value2 = n - 1;
+		int value3 = nr1 - arie;
+		if (value3 < 0)value3 = 0;
+		int value4 = nr2 - arie;
+		if (value4 < 0)value4 = 0;
+		srand((unsigned)time(0));
+		int select1 = (rand() % value1) + value3; //generates a random number from value3 to value1->the X coordonate
+		int select2 = (rand() % value2) + value4;
+		int option = (rand() % 2) + 1;
+		if (option == 1)
+			if (select1 == nr1)
+			{
+				select1 = (rand() % value1) + value3;
+				select2 = nr2;
+			}
+			else select2 = nr2;
+		else if (option == 2)
+		{
+			if (select2 == nr2)select2 = (rand() % value2) + value4;
+			select1 = nr1;
+		}
+		if (h.getValue(select1, select2) == '*')			//if no one is there,the Agent moves
+		{
+			h.setValue(nr1, nr2, '*');
+			h.setValue(select1, select2, 'A');
+			cout << "Agent from position" << nr1 << "," << nr2 << " has moved to position" << select1 << "," << select2;
+			elem.setX(select1);
+			elem.setY(select2);
+			if (select1 > nr1)arie += (select1 - nr1);
+			else if (select1 < nr1)arie -= (nr1 - select1);
+			else if (select2 > nr2)arie += (select2 - nr2);
+			else if (select2 < nr2)arie -= (nr2 - select2);		//we change the value depending on our agent move;if he moves back it's viewport decreases,otherwise it increases;
+			if (arie < 0)arie = 0;
+			if (arie >= n)arie = n - 1;
+		}
+		else if (h.getValue(select1, select2) != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
+		{
+			h.collectWeapon(*this, select1, select2);
+		}
+
+	}
+	else {
+		this->attack(h);																	//else he attacks
+	}
 }
