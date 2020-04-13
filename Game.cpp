@@ -58,6 +58,8 @@ void Game::StartGame()
 		{
 			ok = 0;
 			cout << "End Game!" << endl;
+			cout << "The winner is Agent : ";
+			h.show();cout << endl;
 			cout << h;
 		}
 	}

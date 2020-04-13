@@ -71,7 +71,7 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 		}
 		else {
 			StoneGloves* arr = new StoneGloves(five, six);
-			harta[five][six] = 'G';
+			harta[five][six] = 'T';
 			protection.push_back(arr);
 		}
 		setAgents();
@@ -87,6 +87,7 @@ void Harta::deleteAgent(int x, int y)
 	{
 		if (agent[i]->getX() == x && agent[i]->getY() == y)agent.erase(i + agent.begin());
 	}
+	setAgents();
 }
 void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
 {
@@ -96,7 +97,7 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
 			{
 				harta[x][y] = '*';
-				cout << "Agent from position (" << x << "," << y << ") has collected the weapon:";
+				cout << "Agent from position (" << agent[i]->getY() << "," << agent[i]->getY() << ") has collected the weapon:";
 				weapons[i]->afis();
 				cout << "!"<<endl;
 				agent[i]->chargeWeapon(weapons[i]);
@@ -121,7 +122,7 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 			{
 				harta[x][y] = '*';
 				cout << "Houurray!" << endl;
-				cout<<"Agent from position" << x << ", " << y << " has collected the self-defense weapon : ";
+				cout<<"Agent from position (" << agent[i]->getX() << ", " << agent[i]->getY() << ") has collected the self-defense weapon : ";
 				protection[i]->afisare();
 				cout << "!"<<endl;
 				cout << endl;
@@ -198,12 +199,8 @@ ostream& operator<<(ostream& out, const Harta& h) {
 
 void Harta::show()
 {
-	for (int i = 0; i < limitX; i++)
-	{
-		for (int j = 0; j < limitX; j++)
-			cout << harta[i][j];
-		cout << endl;
-	}
+	cout << "from position: (" << agent[0]->getX() << "," << agent[0]->getY() << ").";
+	agent[0]->show();
 }
 
 Harta::~Harta()
@@ -257,6 +254,7 @@ bool Harta::isFree(int x, int y,int i)
 
 void Harta::changePosition(int nr1,int nr2,int i)
 {
+
 	int n = getSize();
 	int arie = agent[i]->getView();
 	if (isFree(nr1, nr2, i) == 1)			//we search if there is another Agent
@@ -274,7 +272,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				{
 					agent[i]->attack();
 					harta[l][agent[i]->getY()] = '*';
-					cout << "Hahaha,it seems like the agent from " << l << "," << agent[i]->getY() << " didn't pay attention to who was around him,so he DIED in the game!";
+					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him,so he DIED in the game!";
 					cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
 					cout << endl;
 					cout << endl;
@@ -288,13 +286,14 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			{
 				agent[i]->attack();
 				harta[agent[i]->getX()][j] = '*';
-				cout << "Hahaha,it seems like the agent from " << agent[i]->getX() << "," << j << " didn't pay attention to who was around him,so he DIED in the game!";
+				cout << "Hahaha,it seems like the agent from (" << agent[i]->getX() << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!";
 				cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
 				cout << endl;
 				cout << endl;
 				deleteAgent(agent[i]->getX(), j);
 				setAgents();
 				cout << "There are only: " << getAgents() << " agents left!" << endl;
+				cout << endl;
 				ok = 0;
 			}
 		if (ok == 1)
@@ -304,36 +303,36 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			limit2 = agent[i]->getY() - arie;
 			if (limit1 < 0)limit1 = 0;
 			if (limit2 < 0)limit2 = 0;
-			if (agent[i]->getX() - 1 > 0)//ce fac daca ajung pe margine/colturi?
+			if (agent[i]->getX() - 1 >= 0)//ce fac daca ajung pe margine/colturi?
 			{
 				for (int l = agent[i]->getX()-1; l >= limit1; l--)
 					if (getValue(l, agent[i]->getY()) == 'A' && l!= agent[i]->getX())
 					{
 						agent[i]->attack();
 						harta[l][agent[i]->getY()] = '*';
-						cout << "Hahaha,it seems like the agent from " << l << "," << agent[i]->getY() << " didn't pay attention to who was around him,so he DIED in the game!" << endl;
+						cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
 						cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
 						deleteAgent(l, agent[i]->getY());
-						setAgents();
 						cout << endl;
+						cout << "There are only: " << getAgents() << " agents left!" << endl;
 						cout << endl;
-						cout << "There are only: " << getAgents() << " left!" << endl;
 					}
 			}
-			if (agent[i]->getY() - 1 > 0)  //ce fac daca ajung pe margine?
+			if (agent[i]->getY() - 1 >= 0)  //ce fac daca ajung pe margine?
 			{
 				for (int j = agent[i]->getY()-1; j >= limit2; j--)
 					if (getValue(agent[i]->getX(), j) == 'A' && j!= agent[i]->getY())
 					{
 						agent[i]->attack();
 						harta[agent[i]->getX()][j] = '*';
-						cout << "Hahaha,it seems like the agent from " << agent[i]->getX() << "," << j << " didn't pay attention to who was around him,so he DIED in the game!" << endl;
+						cout << "Hahaha,it seems like the agent from (" << agent[i]->getX() << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
 						cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
 						deleteAgent(agent[i]->getX(), j);
 						setAgents();
 						cout << endl;
 						cout << endl;
 						cout << "There are only: " << getAgents() << " left!" << endl;
+						cout << endl;
 					}
 			}
 			
@@ -341,42 +340,41 @@ void Harta::changePosition(int nr1,int nr2,int i)
 	}
 	
 	else {
-		int value1 = nr1 + arie;
+		int value1 = nr1 + arie-1;
 		if (value1 >= n)value1 = n - 1;
-		int value2 = nr2 + arie;
+		int value2 = nr2 + arie-1;
 		if (value2 >= n)value2 = n - 1;
-		int value3 = nr1 - arie;
+		int value3 = nr1 - arie+1;
 		if (value3 < 0)value3 = 0;
-		int value4 = nr2 - arie;
+		int value4 = nr2 - arie+1;
 		if (value4 < 0)value4 = 0;
-		srand((unsigned)time(0));
-		int select1 = (rand() % value1) + value3; //generates a random number from value3 to value1->the X coordonate
-		int select2 = (rand() % value2) + value4;
-		int option = (rand() % 4) + 1;
-		if (option == 1 && value1-1!=nr1)
+		int select1, select2;
+			 select1 = (rand() % value1) + value3; //generates a random number from value3 to value1->the X coordonate
+			 select2 = (rand() % value2) + value4;
+			int option = (rand() % 4) + 1;
+			if (option == 1 && select1 != nr1)
 			{
-				select1 = value1-1;
+				select1 = value1;
 				select2 = nr2;
 			}
-		if (option == 2 && value3>0 && value3-1!=nr1)
-		{
-			select1 = value3 - 1;
-			select2 = nr2;
-		}
-		if (option == 3  &&value2 - 1 != nr2)
-		{
-			select1 = nr1;
-			select2 = value2 - 1;
-		}
-		if (option == 4 && value4>0 && value4 - 1 != nr2)
-		{
-			select1 = nr1;
-			select2 = value4 - 1;
-		}
-		else {
-			select1 = nr1;
-			if (nr2 < n - 1)select2 = nr2 + 1;
-		}
+			if (option == 2 && select1 != nr1)
+			{
+				select1 = value3;
+				select2 = nr2;
+			}
+			if (option == 3 && select2 != nr2)
+			{
+				select1 = nr1;
+				select2 = value2;
+			}
+			if (option == 4 && select2 != nr2)
+			{
+				select1 = nr1;
+				select2 = value4;
+			}
+
+		
+
 		if (getValue(select1, select2) == '*')			//if no one is there,the Agent moves
 		{
 			setValue(nr1, nr2, '*');

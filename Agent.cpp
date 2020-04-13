@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include<ctime>
 using namespace std;
-
+int Agent::arie = 3;
 Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 {
 	Knives* ar = new Knives(this->pozitieOx, this->pozitieOy);	//we want to start the game with each agent having the same tools															
@@ -22,11 +22,11 @@ Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 
 void Agent::chargeWeapon(Arma* a)
 {
-	weapon.push_back(a);
+	this->weapon.push_back(a);
 }
 void Agent::chargeDefWeapon(Armuri* a)
 {
-	protect.push_back(a);
+	this->protect.push_back(a);
 }
 void Agent::attack()
 {
@@ -47,7 +47,23 @@ void Agent::attack()
 		else { b->shootW(); }			//downcasting
 }
 
-
+void Agent::show()
+{
+	cout << "He has collected the weapons:";
+	for (int i = 0; i < weapon.size(); i++)
+	{
+		weapon[i]->afis();
+		cout << ",";
+	}
+	cout << endl;
+	cout << "And the self-defense weapons:";
+	for (int j = 0; j < protect.size(); j++)
+	{
+		protect[j]->afisare();
+		cout << ",";
+	}
+	cout << endl;
+}
 void Agent::setX(int x)
 {
 	pozitieOx = x;
