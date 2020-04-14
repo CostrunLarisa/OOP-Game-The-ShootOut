@@ -17,13 +17,13 @@ int Game::Rounds = 0;
 
 void Game::StartGame()
 {
-	Harta h(6, 6);
+	Harta h(25, 25);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
 	Rounds = nr; int ok = 1;
 	cout << h << endl;
-	int count = 0;
+	int count = 0; 
 	while (h.getAgents() > 0 && ok == 1)
 	{
 		while (count < Rounds && h.getAgents()>1)
@@ -69,13 +69,12 @@ void Game::StartGame()
 				cout << "End Game!" << endl;
 				cout << "The winner is Agent : ";
 				h.show(); cout << endl;
-				cout << h;
+				cout << h; 
 			}
 		}
 		
 	}
 }
-
 
 Game::~Game()
 {

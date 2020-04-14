@@ -34,146 +34,45 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 		int four = rand() % (limitY - 1);
 		int five = rand() % (limitX - 1);
 		int six = rand() % (limitY - 1);
+		while (harta[first][second] != '*')
+		{
+			first = rand() % (limitX - 1);
+			second = rand() % (limitY - 1);
+		}
 		Agent* a = new Agent(first, second);
 		agent.push_back(a);
 		harta[first][second] = 'A';
 		int option = rand() % 3 + 1;
-		if (third != first || four != second)
+		while (harta[third][four]!='*')
 		{
-			if (option == 1)
+			third = rand() % (limitX - 1);
+			four = rand() % (limitY - 1);
+		}
+		if (option == 1)
 			{
 				Guns* ar = new Guns(third, four);
 				weapons.push_back(ar);
 				harta[third][four] = 'G';
 			}
-			else if (option == 2)
+		else if (option == 2)
 			{
 				Hammers* ar = new Hammers(third, four);
 				weapons.push_back(ar);
 				harta[third][four] = 'H';
 			}
-			else
-			{
-				Knives* ar = new Knives(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'K';
-			}
-		}
-		else if (third == first && four == second && four - 1 > 0 && harta[third][four - 1] == '*')
-			{
-				four--;
-				if (option == 1)
-				{
-					Guns* ar = new Guns(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'G';
-				}
-				else if (option == 2)
-				{
-					Hammers* ar = new Hammers(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'H';
-				}
-				else
-				{
-					Knives* ar = new Knives(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'K';
-				}
-			}
-		else if (third == first && four == second && four + 1 <= limitX - 1 && harta[third][four + 1] == '*')
-		{
-				four++;
-				if (option == 1)
-				{
-					Guns* ar = new Guns(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'G';
-				}
-				else if (option == 2)
-				{
-					Hammers* ar = new Hammers(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'H';
-				}
-				else
-				{
-					Knives* ar = new Knives(third, four);
-					weapons.push_back(ar);
-					harta[third][four] = 'K';
-				}
-		}
-		else if (third == first && four == second && third - 1 > 0 && harta[third-1][four] == '*')
-		{
-			third--;
-			if (option == 1)
-			{
-				Guns* ar = new Guns(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'G';
-			}
-			else if (option == 2)
-			{
-				Hammers* ar = new Hammers(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'H';
-			}
-			else
-			{
-				Knives* ar = new Knives(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'K';
-			}
-		}
-		else if (third == first && four == second && third + 1 <= limitX - 1 && harta[third+1][four] == '*')
-		{
-			third++;
-			if (option == 1)
-			{
-				Guns* ar = new Guns(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'G';
-			}
-			else if (option == 2)
-			{
-				Hammers* ar = new Hammers(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'H';
-			}
-			else
-			{
-				Knives* ar = new Knives(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'K';
-			}
-		}
-		else if (third == first && four == second && harta[third + 1][four + 1] == '*')
-		{
-
-			third++; four++;
-			if (option == 1)
-			{
-				Guns* ar = new Guns(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'G';
-			}
-			else if (option == 2)
-			{
-				Hammers* ar = new Hammers(third, four);
-				weapons.push_back(ar);
-				harta[third][four] = 'H';
-			}
-			else
+		else
 			{
 				Knives* ar = new Knives(third, four);
 				weapons.push_back(ar);
 				harta[third][four] = 'K';
 			}
 
+		while ( harta[five][six] != '*')
+		{
+			five = rand() % (limitX - 1);
+			six = rand() % (limitY - 1);
 		}
 		int option2 = rand() % 3 + 1;
-		if (five != first && six != second)
-		{
 			if (option2 == 1)
 			{
 				Scut* arr = new Scut(five, six);
@@ -186,96 +85,6 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 				harta[five][six] = 'C';
 				protection.push_back(arr);
 			}
-			else {
-				StoneGloves* arr = new StoneGloves(five, six);
-				harta[five][six] = 'T';
-				protection.push_back(arr);
-			}
-		}
-		else if (five == first && six == second && five + 1 <= limitX - 1 && harta[five + 1][six] == '*')
-		{
-			five++;
-			if (option2 == 1)
-			{
-				Scut* arr = new Scut(five, six);
-				harta[five][six] = 'S';
-				protection.push_back(arr);
-			}
-			else if (option2 == 1)
-			{
-				Cap* arr = new Cap(five, six);
-				harta[five][six] = 'C';
-				protection.push_back(arr);
-			}
-			else {
-				StoneGloves* arr = new StoneGloves(five, six);
-				harta[five][six] = 'T';
-				protection.push_back(arr);
-			}
-		}
-		else if (five == first && six == second && five - 1 >=0 && harta[five - 1][six] == '*')
-		{
-			five--;
-			if (option2 == 1)
-			{
-				Scut* arr = new Scut(five, six);
-				harta[five][six] = 'S';
-				protection.push_back(arr);
-			}
-			else if (option2 == 1)
-			{
-				Cap* arr = new Cap(five, six);
-				harta[five][six] = 'C';
-				protection.push_back(arr);
-			}
-			else {
-				StoneGloves* arr = new StoneGloves(five, six);
-				harta[five][six] = 'T';
-				protection.push_back(arr);
-			}
-		}
-		else if (five == first && six == second && six + 1 <= limitX - 1 && harta[five][six + 1] == '*')
-		{
-			six++;
-			if (option2 == 1)
-			{
-				Scut* arr = new Scut(five, six);
-				harta[five][six] = 'S';
-				protection.push_back(arr);
-			}
-			else if (option2 == 1)
-			{
-				Cap* arr = new Cap(five, six);
-				harta[five][six] = 'C';
-				protection.push_back(arr);
-			}
-			else {
-				StoneGloves* arr = new StoneGloves(five, six);
-				harta[five][six] = 'T';
-				protection.push_back(arr);
-			}
-		}
-		else if (five == first && six == second && six-1>=0 && harta[five ][six-1] == '*')
-		{
-			six--;
-			if (option2 == 1)
-			{
-				Scut* arr = new Scut(five, six);
-				harta[five][six] = 'S';
-				protection.push_back(arr);
-			}
-			else if (option2 == 1)
-			{
-				Cap* arr = new Cap(five, six);
-				harta[five][six] = 'C';
-				protection.push_back(arr);
-			}
-			else {
-				StoneGloves* arr = new StoneGloves(five, six);
-				harta[five][six] = 'T';
-				protection.push_back(arr);
-			}
-		}
 		
 		setAgents();
 		setProtect();
@@ -292,19 +101,19 @@ void Harta::deleteAgent(int x, int y)
 	}
 	setAgents();
 }
-void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
+void Harta::collectWeapon(int z,int x, int y,int nr1,int nr2)		//this method collects the weapon, erases it from the map and then set the weapon to the current agent
 {
-	try {
-		int ok = 0;
-		for (int i = 0; i < weapons.size();i++)
+	int ok = 0;
+	for (int i = 0; i < weapons.size();i++)
 			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
 			{
-				harta[x][y] = '*';
-				cout << "Agent from position (" << agent[i]->getY() << "," << agent[i]->getY() << ") has collected the weapon:";
+				harta[x][y] = 'A';
+				cout << "Agent from position (" << nr1 << "," << nr2 << ") has collected the weapon:";
+				harta[nr1][nr2] = '*';
 				weapons[i]->afis();
-				cout << "!"<<endl;
-				agent[i]->chargeWeapon(weapons[i]);
-				cout << "He has now: " << agent[i]->getWeapons() << " weapons." << endl;
+				cout << " when he moved to position ("<<x<<","<<y<<")!"<<endl;
+				agent[z]->chargeWeapon(weapons[i]);
+				cout << "He has now: " << agent[z]->getWeapons() << " weapons." << endl;
 				weapons.erase(i + weapons.begin());
 				ok = 1;
 				setWeapons();
@@ -313,31 +122,32 @@ void Harta::collectWeapon(int i,int x, int y)		//this method collects the weapon
 				cout << "There are only " << getWeapons() << "  weapons left to be found on the map!"<<endl;
 				cout << "Who's gonna find them?" << endl;
 				cout << "...Mistery..." << endl;
+				break;
 			}
 		
-		if(ok==0)throw ok;
-	}
-	catch (int ok)
+	if(ok==0)
 	{
-		for (int i = 0; i < protection.size(); i++)
-		{
-			if (protection[i]->getX() == x && protection[i]->getY() == y)
-			{
-				harta[x][y] = '*';
-				cout << "Houurray!" << endl;
-				cout<<"Agent from position (" << agent[i]->getX() << ", " << agent[i]->getY() << ") has collected the self-defense weapon : ";
-				protection[i]->afisare();
-				cout << "!"<<endl;
-				cout << endl;
-				agent[i]->chargeDefWeapon(protection[i]);
-				cout << "He has now:" << agent[i]->getSFWeapons() << " self-defense weapons." << endl;
-				protection.erase(i + protection.begin());
-				setProtect();
-				cout << endl;
-				cout << endl;
-				cout << "There are only " << getProtect() << " self-defense weapons left on the map!"<<endl;
-			}
-		}
+				for (int i = 0; i < protection.size(); i++)
+				{
+					if (protection[i]->getX() == x && protection[i]->getY() == y)
+					{
+						harta[x][y] = 'A';
+						harta[nr1][nr2] = '*';
+						cout << "Houurray!" << endl;
+						cout << "Agent from position (" << nr1 << "," << nr2 << ") has collected the self-defense weapon:";
+						protection[i]->afisare();
+						cout << " when he moved to position (" << x << "," << y << ")!" << endl;
+						cout << endl;
+						agent[z]->chargeDefWeapon(protection[i]);
+						cout << "He has now:" << agent[z]->getSFWeapons() << " self-defense weapons." << endl;
+						protection.erase(i + protection.begin());
+						setProtect();
+						cout << endl;
+						cout << endl;
+						cout << "There are only " << getProtect() << " self-defense weapons left on the map!"<<endl;
+						break;
+					}
+				}
 	}
 }
 void Harta::configuration()
@@ -465,11 +275,12 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		int n = getSize();
 		int ok = 1;
 		int arie = agent[i]->getView();
-		int limit1 = agent[i]->getX() + arie;
+		int limit1 = nr1 + arie;
 		if (limit1 >= n)limit1 = n - 1;
-		int limit2 = agent[i]->getY() + arie;
+		int limit2 = nr2 + arie;
 		if (limit2 >= n)limit2 = n - 1;
-		int l = agent[i]->getX()+1;
+		int l = nr1+1;
+		int ok1 = 1;
 		for (l; l <= limit1; l++)
 				if (getValue(l, agent[i]->getY()) == 'A')
 				{
@@ -483,57 +294,63 @@ void Harta::changePosition(int nr1,int nr2,int i)
 					setAgents();
 					cout << "There are only: " << getAgents() << " agents left!" << endl;
 					ok = 0;
+					ok1 = 0;
 					break;
 				}
-		for (int j = agent[i]->getY()+1; j <= limit2; j++)
-			if (getValue(agent[i]->getX(), j) == 'A' )
-			{
-				agent[i]->attack();
-				harta[agent[i]->getX()][j] = '*';
-				cout << "Hahaha,it seems like the agent from (" << agent[i]->getX() << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!";
-				cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
-				cout << endl;
-				cout << endl;
-				deleteAgent(agent[i]->getX(), j);
-				setAgents();
-				cout << "There are only: " << getAgents() << " agents left!" << endl;
-				cout << endl;
-				ok = 0;
-				break;
-			}
+		if (ok1 == 1)
+		{
+			for (int j = nr2+1; j <= limit2; j++)
+				if (getValue(agent[i]->getX(), j) == 'A' )
+				{
+					agent[i]->attack();
+					harta[nr1][j] = '*';
+					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!";
+					cout << "Agent from position (" << nr1 << "," << nr2<< ") killed him!" << endl;
+					cout << endl;
+					cout << endl;
+					deleteAgent(nr1, j);
+					setAgents();
+					cout << "There are only: " << getAgents() << " agents left!" << endl;
+					cout << endl;
+					ok = 0;
+					break;
+				}
+		}
+		
 		if (ok == 1)
 		{
 
-			limit1 = agent[i]->getX() - arie;
-			limit2 = agent[i]->getY() - arie;
+			limit1 = nr1 - arie;
+			limit2 = nr2 - arie;
 			if (limit1 < 0)limit1 = 0;
 			if (limit2 < 0)limit2 = 0;
-			if (agent[i]->getX() - 1 >= 0)//ce fac daca ajung pe margine/colturi?
-			{
-				for (int l = agent[i]->getX()-1; l >= limit1; l--)
-					if (getValue(l, agent[i]->getY()) == 'A' && l!= agent[i]->getX())
+			int ok2 = 1;
+		
+			for (int l = nr1-1; l >= limit1; l--)
+					if (getValue(l, nr2) == 'A' && l!= nr2)
 					{
 						agent[i]->attack();
-						harta[l][agent[i]->getY()] = '*';
-						cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
-						cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
-						deleteAgent(l, agent[i]->getY());
+						harta[l][nr2] = '*';
+						cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
+						cout << "Agent from position (" << agent[i]->getX() << "," << nr2 << ") killed him!" << endl;
+						deleteAgent(l, nr2);
 						cout << endl;
 						cout << "There are only: " << getAgents() << " agents left!" << endl;
 						cout << endl;
+						ok2 = 0;
 						break;
+				
 					}
-			}
-			if (agent[i]->getY() - 1 >= 0)  //ce fac daca ajung pe margine?
+			if (ok2 == 1)
 			{
-				for (int j = agent[i]->getY()-1; j >= limit2; j--)
-					if (getValue(agent[i]->getX(), j) == 'A' && j!= agent[i]->getY())
+				for (int j = nr2-1; j >= limit2; j--)
+					if (getValue(nr1, j) == 'A' && j!= nr2)
 					{
 						agent[i]->attack();
-						harta[agent[i]->getX()][j] = '*';
-						cout << "Hahaha,it seems like the agent from (" << agent[i]->getX() << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
-						cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
-						deleteAgent(agent[i]->getX(), j);
+						harta[nr1][j] = '*';
+						cout << "Hahaha,it seems like the agent from (" << nr1<< "," << j << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
+						cout << "Agent from position (" << nr1<< "," << nr2 << ") killed him!" << endl;
+						deleteAgent(nr1, j);
 						setAgents();
 						cout << endl;
 						cout << endl;
@@ -542,112 +359,68 @@ void Harta::changePosition(int nr1,int nr2,int i)
 						break;
 					}
 			}
-			
+		
 		}
 	}
-	
 	else {
-		int value1 = nr1 + arie-1;
+		int value1 = nr1 + arie - 1;
 		if (value1 >= n)value1 = n - 1;
-		int value2 = nr2 + arie-1;
+		int value2 = nr2 + arie - 1;
 		if (value2 >= n)value2 = n - 1;
-		int value3 = nr1 - arie+1;
+		int value3 = nr1 - arie + 1;
 		if (value3 < 0)value3 = 0;
-		int value4 = nr2 - arie+1;
+		int value4 = nr2 - arie + 1;
 		if (value4 < 0)value4 = 0;
-		int select1, select2;
-
-		/*if (value1 < value3)select1 = value3 + rand() / (RAND_MAX / (value3 - value1 + 1) + 1);//rand() % value3) + value1; //generates a random number from value3 to value1->the X coordonate
-		else if(value3<value1)select1 = value1 + rand() / (RAND_MAX / (value1 - value3 + 1) + 1); //(rand() % value1) + value3;
-		if(value2<value4)select2 = value2 + rand() / (RAND_MAX / (value4 - value2 + 1) + 1); //(rand() % value4) + value2;
-		else if (value4 < value2)select2 = value4 + rand() / (RAND_MAX / (value2 - value4 + 1) + 1); //(rand() % value2) + value4;*/
+		int select1, select2, ok = 1;
 		int option = (rand() % 4) + 1;
-		if (option == 1 )
+		if (option == 1)
 		{
-			select1 = nr1 - 2;
-			if (select1 < 0)select1 = 0;
+			select1 = value1;
 			select2 = nr2;
-
 		}
 		if (option == 2)
 		{
-			select1 = nr1 + 2;
-			if (select1 >= n )select1 = n - 1;
+			select1 = value3;
 			select2 = nr2;
 		}
 		if (option == 3)
 		{
-			select2 = nr2 - 2;
-			if (select2 < 0)select2 = 0;
+			select2 = value2;
 			select1 = nr1;
 		}
 		if (option == 4)
 		{
-			select2 = nr2 + 2;
-			if (select2 >= n)select2 = n - 1;
+			select2 = value4;
 			select1 = nr1;
 		}
-			/*if (option == 1 && select1 != nr1)
+		while (select1 == nr1 && select2 == nr2)
+		{
+			option = (rand() % 4) + 1;
+			if (option == 1)
 			{
 				select1 = value1;
 				select2 = nr2;
 			}
-			if (option == 2 && select1 != nr1)
+			if (option == 2)
 			{
 				select1 = value3;
 				select2 = nr2;
 			}
-			if (option == 3 && select2 != nr2)
+			if (option == 3)
 			{
-				select1 = nr1;
 				select2 = value2;
-			}
-			if (option == 4 && select2 != nr2)
-			{
 				select1 = nr1;
+			}
+			if (option == 4)
+			{
 				select2 = value4;
-			}
-			/*else if (nr2-2 >= 0)
-			{
 				select1 = nr1;
-				select2 = nr2 - 2;
 			}
-			else if(nr2-1==0)
-			{
-				select1 = nr1;
-				select2 = nr2 - 1;
-			}
-			else {
-				if (nr1-2 >= 0)
-				{
-					select1 = nr1 - 2;
-					select2 = nr2;
-				}
-				else {
-					if (nr2 + 2 <= n - 1)
-					{select1 = nr1;
-					select2 = nr2 + 2;
-
-					}
-					else if (nr2 + 1 <= n - 1)
-					{
-						select1 = nr1;
-						select2 = nr2 + 1;
-
-					}
-					
-				}
-			}
-			if (nr1 == 0 && nr2 == 0)
-			{
-				select1 = 0;
-				select2 = 2;
-			}*/
-
+		}
 		if (harta[select1][select2] == '*')			//if no one is there,the Agent moves
 		{
-			setValue(nr1, nr2, '*');
-			setValue(select1, select2, 'A');
+			harta[nr1][nr2]='*';
+			harta[select1][select2]='A';
 			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;
 			cout << endl;
 			agent[i]->setX(select1);
@@ -656,7 +429,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		}
 		else if (harta[select1][select2] != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
-			collectWeapon(i, select1, select2);
+			collectWeapon(i, select1, select2,nr1,nr2);
+			agent[i]->setX(select1);
+			agent[i]->setY(select2);
 		}
 
 	}

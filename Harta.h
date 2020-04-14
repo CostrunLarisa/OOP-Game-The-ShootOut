@@ -27,7 +27,7 @@ public:
 	void changePosition(int,int,int);
 	void show(); //metoda pentru afisarea hartii dupa fiecare runda;
 	void deleteAgent(int,int);
-	void collectWeapon(int, int,int);
+	void collectWeapon(int, int,int,int,int);
 	int getSize() const;
 	int getWeapons() const;
 	int getProtect() const;
