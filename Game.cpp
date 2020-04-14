@@ -17,7 +17,7 @@ int Game::Rounds = 0;
 
 void Game::StartGame()
 {
-	Harta h(12, 12);
+	Harta h(6, 6);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
@@ -35,33 +35,44 @@ void Game::StartGame()
 			cout << h;
 			cout << endl;
 		}
-		cout << "Continue?(Answer 1 means yes, answer 0 means no).";
-		int answer;
-		cin >> answer;
-		if (answer == 1)
-		{
-			int nr;
-			cout << "Insert the number of rounds you want the game to run:";
-			cin >> nr;
-			Rounds = nr;
-			currentRound += nr;
-			ok = 1;
-			count = 0;
-		}
-		else
-		{
-			cout << "Oh,noo! You've stopped the game! :(" << endl;
-			ok = 0;
-		}
-	
 		if (h.getAgents() == 1)
 		{
 			ok = 0;
 			cout << "End Game!" << endl;
 			cout << "The winner is Agent : ";
-			h.show();cout << endl;
+			h.show(); cout << endl;
 			cout << h;
 		}
+		else {
+			cout << "Continue?(Answer 1 means yes, answer 0 means no).";
+			int answer;
+			cin >> answer;
+			if (answer == 1)
+			{
+				int nr;
+				cout << "Insert the number of rounds you want the game to run:";
+				cin >> nr;
+				Rounds = nr;
+				currentRound += nr;
+				ok = 1;
+				count = 0;
+			}
+			else
+			{
+				cout << "Oh,noo! You've stopped the game! :(" << endl;
+				ok = 0;
+			}
+
+			if (h.getAgents() == 1)
+			{
+				ok = 0;
+				cout << "End Game!" << endl;
+				cout << "The winner is Agent : ";
+				h.show(); cout << endl;
+				cout << h;
+			}
+		}
+		
 	}
 }
 
