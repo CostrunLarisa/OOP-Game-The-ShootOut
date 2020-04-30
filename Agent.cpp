@@ -30,22 +30,135 @@ void Agent::chargeDefWeapon(Armuri* a)
 }
 void Agent::attack()
 {
-	srand((unsigned)time(0));
-	int option = rand() % getWeapons();
-	cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
-		Arma* b = (Arma*)weapon[option];
-		if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+	int ok1 = 1;
+	int ok2 = 1;
+	int poz = 0;
+	for (int k = 0; k < getWeapons(); k++)
+	{
+		if (Hammers* b = dynamic_cast<Hammers*>(weapon[k]))
 		{
-			int secondop = rand() % getSFWeapons();
-			int choose = (rand() % 3) + 1;
-			Armuri* a = (Armuri*)protect[secondop];
-			if(choose==1)a->shootG(b);
-			else if(choose==2)a->shootK(b);
-			else a->shootH(b);
-						//downcasting,not working
+			ok2 = 0;
+			poz = k;
+			cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
+			if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+			{
+				for (int l = 0; l < getSFWeapons(); l++)
+				{
+					if (Scut* c = dynamic_cast<Scut*>(protect[l]))
+					{
+						c->shootH(b);
+						break;
+					}
+					else if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
+					{
+						c->shootH(b);
+						break;
+					}
+					else if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
+						c->shootH(b);
+						break;
+					}
+				}
+			}
+			else {
+				b->shootW();
+			}
+			break;
 		}
-		else { b->shootW(); }			//downcasting
+	}
+	
+	if (ok2 == 1)
+	{
+		for (int k = 0; k < getWeapons(); k++)
+		{
+			if (Guns* b = dynamic_cast<Guns*>(weapon[k]))
+			{
+				ok1 = 0;
+				poz = k;
+				cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
+				if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+				{
+					int choice1 = 1;
+					int choice2 = 1;
+					int choice3 = 1;
+					int poz2 = 0;
+					for (int l = 0; l < getSFWeapons(); l++)
+					{
+						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
+						{
+							choice1 = 0;
+							c->shootG(b);
+							break;
+						}
+					}
+					if (choice1 == 0)
+					{
+						for (int l = 0; l < getSFWeapons(); l++)
+						{
+							if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
+							{
+								choice2 = 0;
+								c->shootG(b);
+								break;
+							}
+						}
+					}
+					if (choice2 == 0)
+					{
+						for (int l = 0; l < getSFWeapons(); l++)
+						{
+							if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
+								c->shootG(b);
+								break;
+							}
+						}
+					}
+				}
+				else {
+					b->shootW();
+				}
+				break;
+			}
+		}
+	}
+	if (ok1 == 1)
+	{
+		for (int k = 0; k < getWeapons(); k++)
+		{
+			if (Knives* b = dynamic_cast<Knives*>(weapon[k]))
+			{
+				poz = k;
+				cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
+				if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
+				{
+					for (int l = 0; l < getSFWeapons(); l++)
+					{
+						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
+						{
+							c->shootK(b);
+							break;
+						}
+						else if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
+						{
+							c->shootK(b);
+							break;
+						}
+						else if (Cap* c = dynamic_cast<Cap*>(protect[l]))
+						{
+							c->shootK(b);
+							break;
+						}
+					}
+				}
+				else {
+					b->shootW();
+				}
+				break;
+			}
+		}
+	}
 }
+
 
 void Agent::show()
 {

@@ -393,7 +393,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			select2 = value4;
 			select1 = nr1;
 		}
-		while (select1 == nr1 && select2 == nr2)
+		while (select1 == nr1 && select2 == nr2)	//we select a random orientation for the move (N,S,E,V)
 		{
 			option = (rand() % 4) + 1;
 			if (option == 1)
@@ -425,10 +425,30 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			cout << endl;
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
+			if (nr1 == select1)						//daca in momentul in care face o mutare are mai multe arme de colectat le colecteaza
+			{
+				for (int j = nr2 + 1; j < select2; j++)
+					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
+			}
+			else
+			{
+				for (int j = nr1 + 1; j < select1; j++)
+					if (harta[j][select2] != '*')collectWeapon(i, j, select2, nr1, nr2);
+			}
 
 		}
 		else if (harta[select1][select2] != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
+			if (nr1 == select1)						//daca in momentul in care face o mutare are mai multe arme de colectat le colecteaza
+			{
+				for (int j = nr2 + 1; j < select2; j++)
+					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
+			}
+			else
+			{
+				for (int j = nr1 + 1; j < select1; j++)
+					if (harta[j][select2] != '*')collectWeapon(i,j,select2, nr1, nr2);
+			}
 			collectWeapon(i, select1, select2,nr1,nr2);
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
