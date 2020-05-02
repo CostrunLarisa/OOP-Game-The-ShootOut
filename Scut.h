@@ -10,8 +10,7 @@ class Guns;
 class Hammers;
 class Knives;
 class Armuri;
-class Scut :
-	virtual public Armuri
+class Scut :virtual public Armuri
 {
 public:
 	Scut(int, int);

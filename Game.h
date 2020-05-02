@@ -3,8 +3,8 @@
 class Game
 {
 private:
-	static int Rounds;
-	static int currentRound;
+	static int Rounds;			//the number of rounds inserted by the user
+	static int currentRound;	//the TOTAL current rounds
 public:
 	void StartGame();
 	~Game();

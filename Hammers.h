@@ -1,10 +1,7 @@
 #ifndef HAMMERS_H
 #define HAMMERS_H
 #include "Arma.h"
-#include "Harta.h"
-#include "Agent.h"
 
-class Arma;
 class Hammers :virtual public Arma
 {
 public:

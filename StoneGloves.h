@@ -9,9 +9,7 @@
 class Guns;
 class Hammers;
 class Knives;
-class Armuri;
-class StoneGloves :
-	virtual public Armuri
+class StoneGloves :virtual public Armuri
 {
 public:
 	StoneGloves(int, int);

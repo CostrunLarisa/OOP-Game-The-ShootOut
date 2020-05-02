@@ -10,8 +10,7 @@ class Guns;
 class Hammers;
 class Knives;
 class Armuri;
-class Cap :
-	virtual public Armuri
+class Cap :virtual public Armuri
 {
 public:
 	Cap(int x,int y);

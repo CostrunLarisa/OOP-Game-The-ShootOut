@@ -15,7 +15,7 @@
 #include <iostream>
 using namespace std;
 
-Harta::Harta(int x,int y):limitX(x),limitY(y)
+Harta::Harta(int x,int y):limitX(x),limitY(y),nrWeapons(0),nrAgents(0),nrProtect(0)
 {
 	harta = new char* [limitX];
 	for (int i = 0; i < limitX; i++)
@@ -25,16 +25,16 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 		{
 			harta[i][j] = '*';
 		}
-	srand((unsigned)time(0));			//vrem sa generam un numar random diferit de fiecare data pentru pozitiile agentilor
-	for (int i = 0; i < limitX-1; i++)		//vrem sa populam aproximativ un sfert de harta
+	srand((unsigned)time(0));				//we want to generate a random number for the position of each agent
+	for (int i = 0; i < limitX-1; i++)		//we populate with of a number of elements equal with the dimension of the map-2
 	{
 		int first = rand() % (limitX - 1);
-		int second = rand() % (limitY - 1);	//incerc sa ma asigur ca pozitiile nu se repeta i.e nu vom avea doua obiecte pe aceeasi pozitie
+		int second = rand() % (limitY - 1);	
 		int third = rand() % (limitX - 1);
 		int four = rand() % (limitY - 1);
 		int five = rand() % (limitX - 1);
 		int six = rand() % (limitY - 1);
-		while (harta[first][second] != '*')
+		while (harta[first][second] != '*')	//if there is already an item on the map we generate positions until we can put elements
 		{
 			first = rand() % (limitX - 1);
 			second = rand() % (limitY - 1);
@@ -42,13 +42,13 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 		Agent* a = new Agent(first, second);
 		agent.push_back(a);
 		harta[first][second] = 'A';
-		int option = rand() % 3 + 1;
+		int option = rand() % 3 + 1;		
 		while (harta[third][four]!='*')
 		{
 			third = rand() % (limitX - 1);
 			four = rand() % (limitY - 1);
 		}
-		if (option == 1)
+		if (option == 1)							//it is randomly chosen which kind of weapon will be on the position
 			{
 				Guns* ar = new Guns(third, four);
 				weapons.push_back(ar);
@@ -79,17 +79,28 @@ Harta::Harta(int x,int y):limitX(x),limitY(y)
 				harta[five][six] = 'S';
 				protection.push_back(arr);
 			}
-			else if (option2 == 1)
+			else if (option2 == 2)
 			{
 				Cap* arr = new Cap(five, six);
 				harta[five][six] = 'C';
 				protection.push_back(arr);
 			}
-		
-		setAgents();
-		setProtect();
-		setWeapons();
+			else if (option2 == 3)
+			{
+				StoneGloves* arr = new StoneGloves(five, six);
+				harta[five][six] = 'T';
+				protection.push_back(arr);
+			}
 	}
+	nrWeapons = 0;
+	for (int i = 0; i < weapons.size(); i++)
+		nrWeapons++;
+	nrProtect = 0;
+	for (int i = 0; i < protection.size(); i++)
+		nrProtect++;
+	nrAgents = 0;
+	for (int i = 0; i < agent.size(); i++)
+		nrAgents++;
 }
 
 
@@ -97,7 +108,12 @@ void Harta::deleteAgent(int x, int y)
 {
 	for (int i=0;i<agent.size();i++)
 	{
-		if (agent[i]->getX() == x && agent[i]->getY() == y)agent.erase(i + agent.begin());
+		if (agent[i]->getX() == x && agent[i]->getY() == y)
+		{
+			agent[i]->~Agent();
+			agent.erase(i + agent.begin());
+			break;
+		}
 	}
 	setAgents();
 }
@@ -250,17 +266,17 @@ bool Harta::isFree(int x, int y,int i)
 	int limit2 = y + arie;
 	if (limit2 >= n)limit2 = n - 1;
 	for (int i = x+1; i <= limit1; i++)
-			if (getValue(i, y) == 'A')return 1;	//if there is any Agent in N,S,E,V,then our current object cannot move
+			if (harta[i][y]=='A')return 1;	//if there is any Agent in N,S,E,V,then our current object cannot move
 	for (int j = y+1; j <= limit2; j++)
-		if (getValue(x, j) == 'A')return 1;
+		if (harta[x][j] == 'A')return 1;
 	limit1 = x - arie;
 	limit2 = y - arie;
 	if (limit1 < 0)limit1 = 0;
 	if (limit2 < 0)limit2 = 0;
 	for (int i = x-1; i >= limit1; i--)
-			if (getValue(i, y) == 'A')return 1;
+			if (harta[i][y]== 'A')return 1;
 	for (int j = y-1; j >= limit2; j--)
-		if (getValue(x, j) == 'A')return 1;
+		if (harta[x][j] == 'A')return 1;
 
 	return 0;
 }
@@ -286,11 +302,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				{
 					agent[i]->attack();
 					harta[l][agent[i]->getY()] = '*';
-					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him,so he DIED in the game!";
-					cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") killed him!" << endl;
-					cout << endl;
-					cout << endl;
+					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him!";
+					cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") attacked him!" << endl;
 					deleteAgent(l, agent[i]->getY());
+					cout << endl;
+					cout << endl;
 					setAgents();
 					cout << "There are only: " << getAgents() << " agents left!" << endl;
 					ok = 0;
@@ -363,7 +379,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		}
 	}
 	else {
-		int value1 = nr1 + arie - 1;
+		int value1 = nr1 + arie - 1;			//there are selected positions N,S,E,V for the move,which are smaller with 1 unit than the area of visibility of one agent
+												//we treat the sensitive cases:if the position+area-1 is bigger than the limits of the map (values>=limit or values<0)
+												//then we set it either equal to limit-1 or equal to 0
 		if (value1 >= n)value1 = n - 1;
 		int value2 = nr2 + arie - 1;
 		if (value2 >= n)value2 = n - 1;
@@ -371,7 +389,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		if (value3 < 0)value3 = 0;
 		int value4 = nr2 - arie + 1;
 		if (value4 < 0)value4 = 0;
-		int select1, select2, ok = 1;
+		int select1=nr1, select2=nr2, ok = 1;
 		int option = (rand() % 4) + 1;
 		if (option == 1)
 		{
@@ -393,7 +411,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			select2 = value4;
 			select1 = nr1;
 		}
-		while (select1 == nr1 && select2 == nr2)	//we select a random orientation for the move (N,S,E,V)
+		while (select1 == nr1 && select2 == nr2)	//we select a random orientation for the move (N,S,E,V) if the new random chosen position is the same with the initial one
 		{
 			option = (rand() % 4) + 1;
 			if (option == 1)
