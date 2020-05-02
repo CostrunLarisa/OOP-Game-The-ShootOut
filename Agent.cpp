@@ -18,7 +18,44 @@ Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 	Cap* arr = new Cap(this->pozitieOx, this->pozitieOy);
 	protect.push_back(arr);
 }
-
+void Agent::steal(Agent* a)
+{
+	for (int i = 0; i < a->weapon.size(); i++)
+	{
+		if (Hammers* b = dynamic_cast<Hammers*>(a->weapon[i]))
+		{
+			cout << "The Killer has stolen the weapon:";
+			a->weapon[i]->afis();
+			cout << " from the agent on the position (" << a->pozitieOx << "," << a->pozitieOy << ")!" << endl;
+			this->chargeWeapon(a->weapon[i]);
+		}
+		if (Guns* b = dynamic_cast<Guns*>(a->weapon[i]))
+		{
+			cout << "The Killer has stolen the weapon:";
+			a->weapon[i]->afis();
+			cout << " from the agent on the position (" << a->pozitieOx << "," << a->pozitieOy << ")!" << endl;
+			this->chargeWeapon(a->weapon[i]);
+		}
+	}
+	for (int j = 0; j <a->protect.size(); j++)
+	{
+		if (Scut* b = dynamic_cast<Scut*>(a->protect[j]))
+		{
+			cout << "The Killer has stolen the self-defense weapon:";
+			a->protect[j]->afisare();
+			cout << " from the agent on the position (" << a->pozitieOx << "," << a->pozitieOy << ")!" << endl;
+			this->chargeDefWeapon(a->protect[j]);
+		}
+		if (StoneGloves * c = dynamic_cast<StoneGloves*>(a->protect[j]))
+		{
+			cout << "The Killer has stolen the self-defense weapon:";
+			a->protect[j]->afisare();
+			cout << " from the agent on the position (" << a->pozitieOx << "," << a->pozitieOy << ")!" << endl;
+			this->chargeDefWeapon(a->protect[j]);
+		}
+	}
+	cout << endl;
+}
 
 void Agent::chargeWeapon(Arma* a)
 {

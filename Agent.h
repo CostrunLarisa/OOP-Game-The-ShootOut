@@ -17,6 +17,7 @@ class Agent
 	vector<Armuri*> protect;  
 public:
 	Agent(int x=0,int y=0);
+	void steal(Agent*);		//if one agent kills another one he has the right to stole the weapons; he steals only the dead agent has something else than cap and knife
 	~Agent();
 	int getView();                  //returns the area of visibility
 	void chargeWeapon(Arma* a);		//method used if he collected a weapon 

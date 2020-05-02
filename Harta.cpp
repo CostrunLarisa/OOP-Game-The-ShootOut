@@ -104,12 +104,13 @@ Harta::Harta(int x,int y):limitX(x),limitY(y),nrWeapons(0),nrAgents(0),nrProtect
 }
 
 
-void Harta::deleteAgent(int x, int y)
+void Harta::deleteAgent(Agent* a,int x, int y)
 {
 	for (int i=0;i<agent.size();i++)
 	{
 		if (agent[i]->getX() == x && agent[i]->getY() == y)
 		{
+			a->steal(agent[i]);
 			agent[i]->~Agent();
 			agent.erase(i + agent.begin());
 			break;
@@ -302,9 +303,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				{
 					agent[i]->attack();
 					harta[l][agent[i]->getY()] = '*';
-					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him!";
+					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him!"<<endl;
 					cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") attacked him!" << endl;
-					deleteAgent(l, agent[i]->getY());
+					deleteAgent(agent[i],l, agent[i]->getY());
 					cout << endl;
 					cout << endl;
 					setAgents();
@@ -320,11 +321,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				{
 					agent[i]->attack();
 					harta[nr1][j] = '*';
-					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him,so he DIED in the game!";
-					cout << "Agent from position (" << nr1 << "," << nr2<< ") killed him!" << endl;
+					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!"<<endl;
+					cout << "Agent from position (" << nr1 << "," << nr2<< ") attacked him!" << endl;
+					deleteAgent(agent[i], nr1, j);
 					cout << endl;
 					cout << endl;
-					deleteAgent(nr1, j);
 					setAgents();
 					cout << "There are only: " << getAgents() << " agents left!" << endl;
 					cout << endl;
@@ -347,9 +348,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 					{
 						agent[i]->attack();
 						harta[l][nr2] = '*';
-						cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
-						cout << "Agent from position (" << agent[i]->getX() << "," << nr2 << ") killed him!" << endl;
-						deleteAgent(l, nr2);
+						cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
+						cout << "Agent from position (" << agent[i]->getX() << "," << nr2 << ") attacked him!" << endl;
+						deleteAgent(agent[i],l, nr2);
 						cout << endl;
 						cout << "There are only: " << getAgents() << " agents left!" << endl;
 						cout << endl;
@@ -364,9 +365,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 					{
 						agent[i]->attack();
 						harta[nr1][j] = '*';
-						cout << "Hahaha,it seems like the agent from (" << nr1<< "," << j << ") didn't pay attention to who was around him,so he DIED in the game!" << endl;
-						cout << "Agent from position (" << nr1<< "," << nr2 << ") killed him!" << endl;
-						deleteAgent(nr1, j);
+						cout << "Hahaha,it seems like the agent from (" << nr1<< "," << j << ") didn't pay attention to who was around him!" << endl;
+						cout << "Agent from position (" << nr1<< "," << nr2 << ") attacked him!" << endl;
+						deleteAgent(agent[i],nr1, j);
 						setAgents();
 						cout << endl;
 						cout << endl;
@@ -435,15 +436,14 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				select1 = nr1;
 			}
 		}
-		if (harta[select1][select2] == '*')			//if no one is there,the Agent moves
+		if (harta[select1][select2] == '*')													//if no one is there,the Agent moves
 		{
 			harta[nr1][nr2]='*';
 			harta[select1][select2]='A';
-			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;
 			cout << endl;
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
-			if (nr1 == select1)						//daca in momentul in care face o mutare are mai multe arme de colectat le colecteaza
+			if (nr1 == select1)																//our agent searches for weapons while changing position
 			{
 				for (int j = nr2 + 1; j < select2; j++)
 					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
@@ -453,21 +453,24 @@ void Harta::changePosition(int nr1,int nr2,int i)
 				for (int j = nr1 + 1; j < select1; j++)
 					if (harta[j][select2] != '*')collectWeapon(i, j, select2, nr1, nr2);
 			}
-
+			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;
 		}
 		else if (harta[select1][select2] != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
-			if (nr1 == select1)						//daca in momentul in care face o mutare are mai multe arme de colectat le colecteaza
+			harta[nr1][nr2] = '*';
+			if (nr1 == select1)														
 			{
-				for (int j = nr2 + 1; j < select2; j++)
-					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
+				for (int j = nr2 + 1; j <= select2; j++)
+					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);//if on his road he finds more weapons he collects them
 			}
-			else
+			else if(nr2==select2)
 			{
-				for (int j = nr1 + 1; j < select1; j++)
+				for (int j = nr1 + 1; j <= select1; j++)
 					if (harta[j][select2] != '*')collectWeapon(i,j,select2, nr1, nr2);
 			}
-			collectWeapon(i, select1, select2,nr1,nr2);
+			harta[select1][select2] = 'A';
+			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;//we say on which
+																																			//position he moves
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
 		}

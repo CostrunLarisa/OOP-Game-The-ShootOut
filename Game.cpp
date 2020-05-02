@@ -8,7 +8,7 @@ int Game::Rounds = 0;
 
 void Game::StartGame()
 {
-	Harta h(25, 25);
+	Harta h(10, 10);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
