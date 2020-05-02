@@ -5,6 +5,7 @@ class Knives :virtual public Arma
 {
 public:
 	Knives(int,int);
+	Knives();
 	virtual void afis();		
 	virtual void shootW();
 };

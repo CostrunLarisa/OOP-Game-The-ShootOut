@@ -2,8 +2,8 @@
 #include "Arma.h"
 #include<iostream>
 using namespace std;
-Hammers::Hammers(int x, int y) :Arma(x, y) {};
-
+Hammers::Hammers(int x, int y) :Arma(x, y) {}
+Hammers::Hammers():Arma(0,0){}
 void Hammers::afis()
 {
 	cout << "hammer";

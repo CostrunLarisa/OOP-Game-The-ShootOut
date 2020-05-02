@@ -7,7 +7,7 @@
 using namespace std;
 
 StoneGloves::StoneGloves(int x,int y):Armuri(x,y){}
-
+StoneGloves::StoneGloves() :Armuri(0,0){}
 void StoneGloves::afisare()
 {
 	cout << "stone gloves";

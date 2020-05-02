@@ -7,7 +7,7 @@
 using namespace std;
 
 Scut::Scut(int x,int y):Armuri(x,y){}
-
+Scut::Scut():Armuri(0,0){}
 void Scut::afisare()
 {
 	cout << "scut";

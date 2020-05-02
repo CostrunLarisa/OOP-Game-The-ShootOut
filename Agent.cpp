@@ -18,7 +18,8 @@ Agent::Agent(int poz1, int poz2) :pozitieOx(poz1),pozitieOy(poz2)
 	Cap* arr = new Cap(this->pozitieOx, this->pozitieOy);
 	protect.push_back(arr);
 }
-void Agent::steal(Agent* a)
+void Agent::steal(Agent* a)												//we check if the agent has more weapons, others than the ones from the starter-pack
+																		//if so,then the Killer steals the weapons
 {
 	for (int i = 0; i < a->weapon.size(); i++)
 	{
@@ -37,7 +38,7 @@ void Agent::steal(Agent* a)
 			this->chargeWeapon(a->weapon[i]);
 		}
 	}
-	for (int j = 0; j <a->protect.size(); j++)
+	for (int j = 0; j <a->protect.size(); j++)				
 	{
 		if (Scut* b = dynamic_cast<Scut*>(a->protect[j]))
 		{
@@ -65,7 +66,126 @@ void Agent::chargeDefWeapon(Armuri* a)
 {
 	this->protect.push_back(a);
 }
-void Agent::attack()
+int Agent::getOpponentCombo(Agent* a)
+{
+	int ok1 = 1;
+	int ok2 = 1;
+	for (int k = 0; k < a->getWeapons(); k++)
+	{
+		if (Hammers* b = dynamic_cast<Hammers*>(a->weapon[k]))
+		{
+				ok2 = 0;
+				int choice1 = 1;
+				int choice2 = 1;
+				for (int l = 0; l < a->getSFWeapons(); l++)
+				{
+					if (Scut* c = dynamic_cast<Scut*>(a->protect[l]))
+					{
+						choice1 = 0;
+						return 11;
+					}
+				}
+				if (choice1 == 1)
+				{
+					for (int l = 0; l < a->getSFWeapons(); l++)
+					{
+						if (StoneGloves* c = dynamic_cast<StoneGloves*>(a->protect[l]))
+						{
+							choice2 = 0;
+							return 12;
+						}
+					}
+				}
+				if (choice2 == 1 && choice1 == 1)
+				{
+					for (int l = 0; l < a->getSFWeapons(); l++)
+					{
+						if (Cap* c = dynamic_cast<Cap*>(a->protect[l])) {
+							return 13;
+						}
+					}
+				}
+			
+		}
+	}
+
+	if (ok2 == 1)
+	{
+		for (int k = 0; k < a->getWeapons(); k++)
+		{
+			if (Guns* b = dynamic_cast<Guns*>(a->weapon[k]))
+			{
+				ok1 = 0;
+				int choice1 = 1;
+				int choice2 = 1;
+				
+					for (int l = 0; l <a-> getSFWeapons(); l++)
+					{
+						if (Scut* c = dynamic_cast<Scut*>(a->protect[l]))
+						{
+							choice1 = 0;
+							return 21;
+						}
+					}
+					if (choice1 == 1)
+					{
+						for (int l = 0; l < a->getSFWeapons(); l++)
+						{
+							if (StoneGloves* c = dynamic_cast<StoneGloves*>(a->protect[l]))
+							{
+								choice2 = 0;
+								return 22;
+							}
+						}
+					}
+					if (choice2 == 1)
+					{
+						for (int l = 0; l < a->getSFWeapons(); l++)
+						{
+							if (Cap* c = dynamic_cast<Cap*>(a->protect[l])) {
+								return 23;
+							}
+						}
+					}
+				
+		
+			}
+		}
+	}
+	if (ok1 == 1)
+	{
+		for (int k = 0; k < a->getWeapons(); k++)
+		{
+			if (Knives* b = dynamic_cast<Knives*>(a->weapon[k]))
+			{
+				
+					int choice1 = 1;
+					int choice2 = 1;
+					for (int l = 0; l < a->getSFWeapons(); l++)
+					{
+						if (Scut* c = dynamic_cast<Scut*>(a->protect[l]))
+						{
+							choice1 = 0;
+							return 31;
+						}
+					}
+					if (choice1 == 1)
+					{
+						for (int l = 0; l < a->getSFWeapons(); l++)
+						{
+							if (StoneGloves* c = dynamic_cast<StoneGloves*>(a->protect[l]))
+							{
+								choice2 = 0;
+								return 32;
+							}
+						}
+					}
+			}
+		}
+	}
+	return 33;		//if he gets here,then the only weapons he has are cap and knife
+}
+Agent Agent::attack(Agent* opponent)
 {
 	//this method decides which weapons and which combination one agent will use
 	//first, he search for the strongest combination of weapons: hammer and scut, 
@@ -73,165 +193,328 @@ void Agent::attack()
 	//then,he has the following combination in order of the strength:
 	// hammer and StoneGloves; hammer and cap,so the weapons that protects him, sorted by the power are in this order:scut,StoneGloves,cap
 	//the weapons sorted by the power:hammer,gun,knife
-	int ok1 = 1;
-	int ok2 = 1;
-	int poz = 0;
+	int power = getOpponentCombo(opponent);
 	for (int k = 0; k < getWeapons(); k++)
 	{
 		if (Hammers* b = dynamic_cast<Hammers*>(weapon[k]))
 		{
-			ok2 = 0;
-			poz = k;
-			cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
-			if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
-			{
-				int choice1 = 1;
-				int choice2 = 1;
-				int poz2 = 0;
+			
+			cout << "Agent on the position (" << opponent->getX() << "," << opponent->getY() << ") tries to attack!";
 				for (int l = 0; l < getSFWeapons(); l++)
 				{
 					if (Scut* c = dynamic_cast<Scut*>(protect[l]))
 					{
-						choice1 = 0;
-						c->shootG(b);
-						break;
+						
+						c->shootH(b);
+						return *this;
 					}
 				}
-				if (choice1 == 1)
-				{
-					for (int l = 0; l < getSFWeapons(); l++)
+				for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
 						{
-							choice2 = 0;
-							c->shootG(b);
-							break;
+							
+							if (power >= 12)			//if the opponent has a weaker combination or equal,he loses
+							{
+								c->shootG(b);
+								return *this;
+							}
+							if (power==11){
+								Scut* p = new Scut();
+								p->shootH(b);			//else that means he has hammer+scut,he shoots,he isthe winner
+								return *opponent;
+							}
 						}
 					}
-				}
-				if (choice2 == 1 && choice1 == 1)
-				{
-					for (int l = 0; l < getSFWeapons(); l++)
+				
+				for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
-							c->shootG(b);
-							break;
+							if (power >= 13)			//if the opponent has a weaker combination or equal,he loses
+							{
+								c->shootH(b);
+								return *this;
+							}
+							if (power==11){
+								Scut* p= new Scut();
+								p->shootH(b);			//else that means he has hammer+scut,he shoots,he is the winner
+								return *opponent;
+							}
+							 if (power == 12) {
+								StoneGloves* p = new StoneGloves();
+								p->shootH(b);
+								return *opponent;
+							}
+						
 						}
 					}
-				}
-			}
-			else {
-				b->shootW();
-			}
-			break;
+				
+			
 		}
 	}
 	
-	if (ok2 == 1)
-	{
-		for (int k = 0; k < getWeapons(); k++)
+	for (int k = 0; k < getWeapons(); k++)
 		{
 			if (Guns* b = dynamic_cast<Guns*>(weapon[k]))
 			{
-				ok1 = 0;
-				poz = k;
+				
 				cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
-				if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
-				{
-					int choice1 = 1;
-					int choice2 = 1;
-					int poz2 = 0;
 					for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
 						{
-							choice1 = 0;
-							c->shootG(b);
-							break;
+							if (power >= 21)
+							{
+								c->shootG(b);
+								return *this;
+
+							}
+							if (power==11){
+								Scut* p= new Scut();
+								Hammers* h = new Hammers();
+								p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
+								return *opponent;
+							}
+							if (power == 12) {
+								StoneGloves* p = new StoneGloves();
+								Hammers* h = new Hammers();
+								p->shootH(h);
+								return *opponent;
+							}
+							
 						}
 					}
-					if (choice1 == 1)
+					for (int l = 0; l < getSFWeapons(); l++)
 					{
-						for (int l = 0; l < getSFWeapons(); l++)
-						{
 							if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
 							{
-								choice2 = 0;
-								c->shootG(b);
-								break;
+								
+								if (power >= 22)
+								{
+									c->shootG(b);
+									return *this;
+								}
+								if (power == 21)
+								{
+									Scut* p = new Scut();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 11) {
+									Scut* p = new Scut();
+									Hammers* h = new Hammers();
+									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
+									return *opponent;
+								}
+								if (power == 12) {
+									StoneGloves* p = new StoneGloves();
+									Hammers* h = new Hammers();
+									p->shootH(h);
+									return *opponent;
+								}
 							}
-						}
 					}
-					if (choice2 == 1 && choice1==1)
-					{
-						for (int l = 0; l < getSFWeapons(); l++)
+					
+					for (int l = 0; l < getSFWeapons(); l++)
 						{
-							if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
-								c->shootG(b);
-								break;
+							if (Cap* c = dynamic_cast<Cap*>(protect[l])) 
+							{
+								if (power >= 23)
+								{
+									c->shootG(b);
+									return *this;
+								}
+								if (power == 22)
+								{
+									StoneGloves* p = new StoneGloves();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 21)
+								{
+									Scut* p = new Scut();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 11) {
+									Scut* p = new Scut();
+									Hammers* h = new Hammers();
+									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
+									return *opponent;
+								}
+								if (power == 12) {
+									StoneGloves* p = new StoneGloves();
+									Hammers* h = new Hammers();
+									p->shootH(h);
+									return *opponent;
+								}
 							}
-						}
 					}
-				}
-				else {
-					b->shootW();
-				}
-				break;
+					
+				
+	
 			}
 		}
-	}
-	if (ok1 == 1 && ok2==1)
+	
+	for (int k = 0; k < getWeapons(); k++)
 	{
-		for (int k = 0; k < getWeapons(); k++)
-		{
 			if (Knives* b = dynamic_cast<Knives*>(weapon[k]))
 			{
-				poz = k;
-				cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
-				if (this->getSFWeapons() > 0)				//if the current agent has a self-defense weapon,we choose randomly one
-				{
-					int choice1 = 1;
-					int choice2 = 1;
-					int poz2 = 0;
+				
+					cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
 					for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
 						{
-							choice1 = 0;
-							c->shootG(b);
-							break;
+							
+							if (power >= 31)
+							{
+								c->shootK(b);
+								return *this;
+								
+							}
+							if (power == 23)
+							{
+								Cap* p = new Cap();
+								p->shootG(b);
+								return *opponent;
+							}
+							if (power == 22)
+							{
+								StoneGloves* p = new StoneGloves();
+								p->shootG(b);
+								return *opponent;
+							}
+							if (power == 21)
+							{
+								Scut* p = new Scut();
+								p->shootG(b);
+								return *opponent;
+							}
+							if (power == 11) {
+								Scut* p = new Scut();
+								Hammers* h = new Hammers();
+								p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
+								return *opponent;
+							}
+							if (power == 12) {
+								StoneGloves* p = new StoneGloves();
+								Hammers* h = new Hammers();
+								p->shootH(h);
+								return *opponent;
+							}
+							
 						}
 					}
-					if (choice1 == 1)
-					{
-						for (int l = 0; l < getSFWeapons(); l++)
+					for (int l = 0; l < getSFWeapons(); l++)
 						{
 							if (StoneGloves* c = dynamic_cast<StoneGloves*>(protect[l]))
 							{
-								choice2 = 0;
-								c->shootG(b);
-								break;
+								
+								if (power >= 32)
+								{
+									c->shootK(b);
+									return *this;
+									
+								}
+								if (power == 31)
+								{
+									Knives* p = new Knives();
+									Scut* q = new Scut();
+									q->shootK(p);
+									return *opponent;
+								}
+								if (power == 23)
+								{
+									Cap* p = new Cap();
+									p->shootG(b);
+									return *opponent;
+								}
+								 if (power == 22)
+								{
+									StoneGloves* p = new StoneGloves();
+									p->shootG(b);
+									return *opponent;
+								}
+								 if (power == 21)
+								{
+									Scut* p = new Scut();
+									p->shootG(b);
+									return *opponent;
+								}
+								 if (power == 11) {
+									Scut* p = new Scut();
+									Hammers* h = new Hammers();
+									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
+									return *opponent;
+								}
+								 if (power == 12) {
+									StoneGloves* p = new StoneGloves();
+									Hammers* h = new Hammers();
+									p->shootH(h);
+									return *opponent;
+								}
+								
 							}
 						}
-					}
-					if (choice2 == 1 && choice1==1)
+					
+					for (int l = 0; l < getSFWeapons(); l++)
 					{
-						for (int l = 0; l < getSFWeapons(); l++)
-						{
 							if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
-								c->shootG(b);
-								break;
+								 if (power == 32)
+								{
+									Knives* p = new Knives();
+									StoneGloves* q = new StoneGloves();
+									q->shootK(p);
+									return *opponent;
+								}
+								if (power == 31)
+								{
+									Knives* p = new Knives();
+									Scut* q = new Scut();
+									q->shootK(p);
+									return *opponent;
+								}
+								if (power == 23)
+								{
+									Cap* p = new Cap();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 22)
+								{
+									StoneGloves* p = new StoneGloves();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 21)
+								{
+									Scut* p = new Scut();
+									p->shootG(b);
+									return *opponent;
+								}
+								if (power == 11) {
+									Scut* p = new Scut();
+									Hammers* h = new Hammers();
+									p->shootH(h);		
+									return *opponent;
+								}
+								if (power == 12) {	
+									StoneGloves* p = new StoneGloves();
+									Hammers* h = new Hammers();
+									p->shootH(h);
+									return *opponent;
+								}
+								
 							}
-						}
 					}
-				}
-				else {
-					b->shootW();
-				}
-				break;
+						
+	
 			}
-		}
 	}
+	
+	return *this;			//if we arrived here neither one of them has a stronger combo,they have the basic starter-pack,or the same combos
+							//in this case the priority has the one who initiated the battle,hence return *this
 }
 
 
@@ -285,7 +568,7 @@ int Agent::getView()
 {
 	return arie;
 }
-Agent::~Agent() {
+void Agent::Death() {
 	cout << "Agent from the position (" << pozitieOx << "," << pozitieOy << ") died in the game." << endl;
 	show();
 	weapon.clear();

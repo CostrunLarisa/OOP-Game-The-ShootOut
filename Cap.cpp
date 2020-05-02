@@ -7,7 +7,7 @@
 using namespace std;
 
 Cap::Cap(int x, int y) :Armuri(x, y) {}
-
+Cap::Cap():Armuri(0,0){}
 void Cap::afisare()
 {
 	cout << "cap";

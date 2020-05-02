@@ -6,6 +6,7 @@ class Guns :virtual public Arma
 {
 public:
 	Guns(int,int);
+	Guns();
 	virtual void afis();
 	virtual void shootW();
 };

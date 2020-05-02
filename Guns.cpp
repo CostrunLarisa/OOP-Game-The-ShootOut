@@ -3,7 +3,8 @@
 #include<iostream>
 using namespace std;
 
-Guns::Guns(int x, int y) :Arma(x, y) {};
+Guns::Guns(int x, int y) :Arma(x, y) {}
+Guns::Guns():Arma(0, 0) {}
 
 void Guns::afis()
 {

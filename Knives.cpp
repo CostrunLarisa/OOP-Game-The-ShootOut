@@ -4,6 +4,7 @@
 using namespace std;
 
 Knives::Knives(int x,int y):Arma(x,y){}
+Knives::Knives():Arma(0,0){}
 void Knives::afis()
 {
 	cout << "knife";

@@ -14,6 +14,7 @@ class Cap :virtual public Armuri
 {
 public:
 	Cap(int x,int y);
+	Cap();
 	virtual void afisare();
 	virtual void shootG(Arma*);
 	virtual void shootH(Arma*);

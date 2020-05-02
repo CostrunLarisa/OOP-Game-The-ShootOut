@@ -17,12 +17,13 @@ class Agent
 	vector<Armuri*> protect;  
 public:
 	Agent(int x=0,int y=0);
-	void steal(Agent*);		//if one agent kills another one he has the right to stole the weapons; he steals only the dead agent has something else than cap and knife
-	~Agent();
+	void steal(Agent*);				//if one agent kills another one he has the right to stole the weapons; he steals only the dead agent has something else than cap and knife
+	void Death();
 	int getView();                  //returns the area of visibility
 	void chargeWeapon(Arma* a);		//method used if he collected a weapon 
-	void chargeDefWeapon(Armuri* a);//method used if he collected a weapon that protects him
-	void attack();
+	void chargeDefWeapon(Armuri* a);
+	int getOpponentCombo(Agent*);	//method used if he collected a weapon that protects him
+	Agent attack(Agent*);
 	void show();					//if one agent is the winner,this method displays the weapons he collected during the game
 	void setX(int x);				//methods used to set the coordonates for a new position
 	void setY(int y);

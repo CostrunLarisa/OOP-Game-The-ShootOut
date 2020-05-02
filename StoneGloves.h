@@ -12,6 +12,7 @@ class Knives;
 class StoneGloves :virtual public Armuri
 {
 public:
+	StoneGloves();
 	StoneGloves(int, int);
 	virtual void afisare();
 	virtual void shootG(Arma*);

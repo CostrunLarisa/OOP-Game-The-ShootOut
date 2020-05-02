@@ -6,6 +6,7 @@ class Hammers :virtual public Arma
 {
 public:
 	Hammers(int,int);
+	Hammers();
 	virtual void afis();
 	virtual void shootW();
 };

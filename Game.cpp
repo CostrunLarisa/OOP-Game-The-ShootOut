@@ -8,7 +8,7 @@ int Game::Rounds = 0;
 
 void Game::StartGame()
 {
-	Harta h(10, 10);
+	Harta h(25,25);
 	cout << "Insert the number of rounds you want the game to run:";
 	int nr;
 	cin >> nr;
@@ -55,7 +55,14 @@ void Game::StartGame()
 				cout << "Oh,noo! You've stopped the game! :(" << endl;
 				ok = 0;
 			}
-
+			if (h.getAgents() == 1)											//if after the number of rounds is only one agent,then the game stops
+			{
+				ok = 0;
+				cout << "End Game!" << endl;
+				cout << "The winner is Agent : ";
+				h.show(); cout << endl;										//it is shown the characteristics of the winner
+				cout << h;
+			}
 		}
 		
 	}

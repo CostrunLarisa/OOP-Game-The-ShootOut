@@ -14,6 +14,7 @@ class Scut :virtual public Armuri
 {
 public:
 	Scut(int, int);
+	Scut();
 	virtual void afisare();
 	virtual void shootG(Arma*);
 	virtual void shootH(Arma*);

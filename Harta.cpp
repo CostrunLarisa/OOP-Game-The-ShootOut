@@ -110,9 +110,13 @@ void Harta::deleteAgent(Agent* a,int x, int y)
 	{
 		if (agent[i]->getX() == x && agent[i]->getY() == y)
 		{
-			a->steal(agent[i]);
-			agent[i]->~Agent();
-			agent.erase(i + agent.begin());
+			a->steal(agent[i]);			//the killer steals the weapons
+			agent[i]->Death();			//we display what the dead agent had
+			agent[i]->setX(-1);			//we set unavailable coordonates so that we know which 
+										//agents we have to delete in the end from the map,we did it this way,because
+										//we want to avoid any kind of bugs,such as giving iterators that don't exist anymore
+			agent[i]->setY(-1);
+			
 			break;
 		}
 	}
@@ -124,7 +128,7 @@ void Harta::collectWeapon(int z,int x, int y,int nr1,int nr2)		//this method col
 	for (int i = 0; i < weapons.size();i++)
 			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
 			{
-				harta[x][y] = 'A';
+				
 				cout << "Agent from position (" << nr1 << "," << nr2 << ") has collected the weapon:";
 				harta[nr1][nr2] = '*';
 				weapons[i]->afis();
@@ -148,7 +152,7 @@ void Harta::collectWeapon(int z,int x, int y,int nr1,int nr2)		//this method col
 				{
 					if (protection[i]->getX() == x && protection[i]->getY() == y)
 					{
-						harta[x][y] = 'A';
+						
 						harta[nr1][nr2] = '*';
 						cout << "Houurray!" << endl;
 						cout << "Agent from position (" << nr1 << "," << nr2 << ") has collected the self-defense weapon:";
@@ -171,8 +175,14 @@ void Harta::configuration()
 {
 	for (int i=0;i<agent.size();i++)
 	{
-		changePosition(agent[i]->getX(), agent[i]->getY(),i);
+		if(agent[i]->getX()!=-1)changePosition(agent[i]->getX(), agent[i]->getY(),i);	//each agent makes a move
+	
 	}
+	for (int i = 0; i < agent.size(); i++)
+	{
+		if(agent[i]->getX()==-1)agent.erase(i + agent.begin());		//in the end we remove the ones that died in the game
+	}
+	setAgents();
 }
 
 void Harta::setWeapons()
@@ -229,8 +239,8 @@ ostream& operator<<(ostream& out, const Harta& h) {
 
 void Harta::show()
 {
+	
 	cout << "from position: (" << agent[0]->getX() << "," << agent[0]->getY() << ").";
-	agent[0]->show();
 }
 
 Harta::~Harta()
@@ -258,10 +268,10 @@ Harta::~Harta()
 	nrProtect = 0;
 	limitX = limitY = 0;
 }
-bool Harta::isFree(int x, int y,int i)
+bool Harta::isFree(int x, int y,int z)
 {
 	int n = getSize();
-	int arie = agent[i]->getView();
+	int arie = agent[z]->getView();
 	int limit1 = x + arie;
 	if (limit1 >= n)limit1 = n - 1;				//we check if our viewport doesn't cross the map
 	int limit2 = y + arie;
@@ -299,17 +309,49 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		int l = nr1+1;
 		int ok1 = 1;
 		for (l; l <= limit1; l++)
-				if (getValue(l, agent[i]->getY()) == 'A')
+				if (harta[l][nr2]== 'A' && l!=nr1)
 				{
-					agent[i]->attack();
-					harta[l][agent[i]->getY()] = '*';
-					cout << "Hahaha,it seems like the agent from (" << l << "," << agent[i]->getY() << ") didn't pay attention to who was around him!"<<endl;
-					cout << "Agent from position (" << agent[i]->getX() << "," << agent[i]->getY() << ") attacked him!" << endl;
-					deleteAgent(agent[i],l, agent[i]->getY());
-					cout << endl;
-					cout << endl;
+					int poz;
+					
+					for (int g = 0; g < agent.size(); g++)
+					{
+						if (agent[g]->getX() == l && agent[g]->getY() == nr2)
+						{
+						
+							poz = g;
+							break;
+						}
+					}
+					int poz2;
+					for (int r = 0; r < agent.size(); r++)
+					{
+						if (agent[r]->getX() == nr1 && agent[r]->getY() == nr2)
+						{
+							poz2 = r;
+							break;
+						}
+					}
+
+					cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
+					cout << "Agent from position (" << nr1 << "," << nr2 << ") attacked him!" << endl;
+					Agent* winner;
+					winner = &(agent[poz2]->attack(agent[poz]));
+					if (winner->getX() == l && winner->getY()==nr2)
+					{
+						harta[nr1][nr2] = '*';
+						deleteAgent(winner, nr1, nr2);
+					}
+					if (winner->getX() == nr1 && winner->getY()==nr2)
+					{
+						harta[l][nr2] = '*';
+						deleteAgent(agent[poz2], l, nr2);
+					}
+
 					setAgents();
+					cout << endl;
+					cout << endl;
 					cout << "There are only: " << getAgents() << " agents left!" << endl;
+					cout << endl;
 					ok = 0;
 					ok1 = 0;
 					break;
@@ -317,24 +359,56 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		if (ok1 == 1)
 		{
 			for (int j = nr2+1; j <= limit2; j++)
-				if (getValue(agent[i]->getX(), j) == 'A' )
+				if (getValue(nr1, j) == 'A' && j!=nr2)
 				{
-					agent[i]->attack();
-					harta[nr1][j] = '*';
-					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!"<<endl;
-					cout << "Agent from position (" << nr1 << "," << nr2<< ") attacked him!" << endl;
-					deleteAgent(agent[i], nr1, j);
-					cout << endl;
-					cout << endl;
+					ok1 = 0;
+					ok = 0;
+					int poz;
+					for (int g = 0; g < agent.size(); g++)
+					{
+						
+						if (agent[g]->getX() == nr1 && agent[g]->getY() == j)
+						{
+						
+							poz = g;
+							break;
+						}
+					}
+					int poz2;
+					for (int r = 0; r < agent.size(); r++)
+					{
+						if (agent[r]->getX() == nr1 && agent[r]->getY() == nr2)
+						{
+							poz2 = r;
+							break;
+						}
+					}
+					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!" << endl;
+					cout << "Agent from position (" << agent[poz2]->getX() << "," << agent[poz2]->getY() << ") attacked him!" << endl;
+					Agent* winner;
+					winner = &(agent[poz2]->attack(agent[poz]));
+					if (winner->getY() == j && winner->getX()==agent[i]->getX())
+					{
+						harta[nr1][nr2] = '*';
+						deleteAgent(winner, agent[poz2]->getX(), agent[poz2]->getY());
+					}
+					 if (winner->getX() == agent[poz2]->getX() && winner->getY()==agent[i]->getY())
+					{
+						harta[nr1][j] = '*';
+						deleteAgent(agent[poz2], agent[poz2]->getX(), j);
+					}
+
 					setAgents();
+					cout << endl;
+					cout << endl;
 					cout << "There are only: " << getAgents() << " agents left!" << endl;
 					cout << endl;
-					ok = 0;
 					break;
+
 				}
 		}
 		
-		if (ok == 1)
+		if (ok == 1 && ok1==1)
 		{
 
 			limit1 = nr1 - arie;
@@ -344,34 +418,95 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			int ok2 = 1;
 		
 			for (int l = nr1-1; l >= limit1; l--)
-					if (getValue(l, nr2) == 'A' && l!= nr2)
+					if (getValue(l, nr2) == 'A' && l!= nr1)
 					{
-						agent[i]->attack();
-						harta[l][nr2] = '*';
+						ok2 = 0;
+						int poz;
+						int poz2;
+				
+						for (int g = 0; g < agent.size(); g++)
+						{
+							if (agent[g]->getX() == l && agent[g]->getY() == nr2)
+							{
+							
+								poz = g;
+								break;
+							}
+						}
+						for (int r = 0; r < agent.size(); r++)
+						{
+							if (agent[r]->getX() == nr1 && agent[r]->getY() == nr2)
+							{
+								poz2 = r;
+								break;
+							}
+						}
+						Agent* winner;
+						winner = &(agent[poz2]->attack(agent[poz]));
 						cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
-						cout << "Agent from position (" << agent[i]->getX() << "," << nr2 << ") attacked him!" << endl;
-						deleteAgent(agent[i],l, nr2);
+						cout << "Agent from position (" << nr1 << "," << agent[poz2]->getX() << ") attacked him!" << endl;
+						if (winner->getX() == l && winner->getY()==nr2)
+						{
+							harta[agent[poz2]->getX()][nr2] = '*';
+							deleteAgent(winner, agent[poz2]->getX(), nr2);
+						}
+						if (winner->getX() == agent[poz2]->getX() && winner->getY()==agent[poz2]->getY())
+						{
+							harta[l][nr2] = '*';
+							deleteAgent(agent[poz2], l, nr2);
+						}
+
+						setAgents();
+						cout << endl;
 						cout << endl;
 						cout << "There are only: " << getAgents() << " agents left!" << endl;
 						cout << endl;
-						ok2 = 0;
 						break;
 				
 					}
 			if (ok2 == 1)
 			{
 				for (int j = nr2-1; j >= limit2; j--)
-					if (getValue(nr1, j) == 'A' && j!= nr2)
+					if (getValue(nr1, j) == 'A' && j!=nr2)
 					{
-						agent[i]->attack();
-						harta[nr1][j] = '*';
-						cout << "Hahaha,it seems like the agent from (" << nr1<< "," << j << ") didn't pay attention to who was around him!" << endl;
-						cout << "Agent from position (" << nr1<< "," << nr2 << ") attacked him!" << endl;
-						deleteAgent(agent[i],nr1, j);
+						int poz;
+	
+						for (int g = 0; g < agent.size(); g++)
+						{
+							if (agent[g]->getX() == nr1 && agent[g]->getY() == j)
+							{
+								poz = g; 
+								break;
+							}
+						}
+						int poz2;
+						for (int r = 0; r < agent.size(); r++)
+						{
+							if (agent[r]->getX() == nr1 && agent[r]->getY() == nr2)
+							{
+								poz2 = r;
+								break;
+							}
+						}
+						cout << "Hahaha,it seems like the agent from (" << nr1 << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
+						cout << "Agent from position (" << nr1 << "," << j << ") attacked him!" << endl;
+						Agent* winner;
+						winner=&(agent[poz2]->attack(agent[poz]));
+						if (winner->getY() == j && winner->getX()==nr1) 
+						{	
+							harta[nr1][nr2] = '*';
+							deleteAgent(winner,nr1, nr2);
+						}
+						 if (winner->getY() == nr2 && winner->getX()==nr1)
+						{
+							harta[nr1][j] = '*';
+							deleteAgent(agent[poz2], nr1, j);
+						}
+							
 						setAgents();
 						cout << endl;
 						cout << endl;
-						cout << "There are only: " << getAgents() << " left!" << endl;
+						cout << "There are only: " << getAgents() << " agents left!" << endl;
 						cout << endl;
 						break;
 					}
@@ -461,7 +596,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			if (nr1 == select1)														
 			{
 				for (int j = nr2 + 1; j <= select2; j++)
-					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);//if on his road he finds more weapons he collects them
+					if (harta[select1][j] != '*')
+					{
+						collectWeapon(i, select1, j, nr1, nr2);//if on his road he finds more weapons he collects them
+
+					}
 			}
 			else if(nr2==select2)
 			{
