@@ -175,7 +175,7 @@ void Harta::configuration()
 {
 	for (int i=0;i<agent.size();i++)
 	{
-		if(agent[i]->getX()!=-1)changePosition(agent[i]->getX(), agent[i]->getY(),i);	//each agent makes a move
+		if(agent[i]->getX()!=-1 && agent[i]->getY()!=-1)changePosition(agent[i]->getX(), agent[i]->getY(),i);	//each agent makes a move
 	
 	}
 	for (int i = 0; i < agent.size(); i++)
@@ -333,7 +333,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 					}
 
 					cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
-					cout << "Agent from position (" << nr1 << "," << nr2 << ") attacked him!" << endl;
+
 					Agent* winner;
 					winner = &(agent[poz2]->attack(agent[poz]));
 					if (winner->getX() == l && winner->getY()==nr2)
@@ -384,7 +384,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 						}
 					}
 					cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!" << endl;
-					cout << "Agent from position (" << agent[poz2]->getX() << "," << agent[poz2]->getY() << ") attacked him!" << endl;
+
 					Agent* winner;
 					winner = &(agent[poz2]->attack(agent[poz]));
 					if (winner->getY() == j && winner->getX()==agent[i]->getX())
@@ -442,9 +442,8 @@ void Harta::changePosition(int nr1,int nr2,int i)
 							}
 						}
 						Agent* winner;
-						winner = &(agent[poz2]->attack(agent[poz]));
 						cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
-						cout << "Agent from position (" << nr1 << "," << agent[poz2]->getX() << ") attacked him!" << endl;
+						winner = &(agent[poz2]->attack(agent[poz]));
 						if (winner->getX() == l && winner->getY()==nr2)
 						{
 							harta[agent[poz2]->getX()][nr2] = '*';
@@ -488,8 +487,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 								break;
 							}
 						}
-						cout << "Hahaha,it seems like the agent from (" << nr1 << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
-						cout << "Agent from position (" << nr1 << "," << j << ") attacked him!" << endl;
+						cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!" << endl;
 						Agent* winner;
 						winner=&(agent[poz2]->attack(agent[poz]));
 						if (winner->getY() == j && winner->getX()==nr1) 
@@ -578,14 +576,24 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			cout << endl;
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
-			if (nr1 == select1)																//our agent searches for weapons while changing position
+			if (nr1 == select1 && select2>nr2)																//our agent searches for weapons while changing position
 			{
 				for (int j = nr2 + 1; j < select2; j++)
 					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
 			}
-			else
+			if (nr1 == select1 && select2 < nr2)																//our agent searches for weapons while changing position
+			{
+				for (int j = nr2 - 1; j > select2; j--)
+					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
+			}
+			if (nr2 == select2 && select1 > nr1)
 			{
 				for (int j = nr1 + 1; j < select1; j++)
+					if (harta[j][select2] != '*')collectWeapon(i, j, select2, nr1, nr2);
+			}
+			if (nr2 == select2 && select1 < nr1)
+			{
+				for (int j = nr1 - 1; j > select1; j--)
 					if (harta[j][select2] != '*')collectWeapon(i, j, select2, nr1, nr2);
 			}
 			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;
@@ -593,7 +601,7 @@ void Harta::changePosition(int nr1,int nr2,int i)
 		else if (harta[select1][select2] != '*')	//if there is a weapon or a self-defense weapon we add it to the Agent's tools
 		{
 			harta[nr1][nr2] = '*';
-			if (nr1 == select1)														
+			if (nr1 == select1 && select2>nr2)														
 			{
 				for (int j = nr2 + 1; j <= select2; j++)
 					if (harta[select1][j] != '*')
@@ -602,11 +610,25 @@ void Harta::changePosition(int nr1,int nr2,int i)
 
 					}
 			}
-			else if(nr2==select2)
+			 if(nr2==select2 && select1>nr1)
 			{
 				for (int j = nr1 + 1; j <= select1; j++)
 					if (harta[j][select2] != '*')collectWeapon(i,j,select2, nr1, nr2);
 			}
+			 if (nr2 == select2 && select1 < nr1)
+			 {
+				 for (int j = nr1 -1 ; j >= select1; j--)
+					 if (harta[j][select2] != '*')collectWeapon(i, j, select2, nr1, nr2);
+			 }
+			 if (nr1 == select1 && select2 < nr2)
+			 {
+				 for (int j = nr2 -1 ; j >= select2; j--)
+					 if (harta[select1][j] != '*')
+					 {
+						 collectWeapon(i, select1, j, nr1, nr2);//if on his road he finds more weapons he collects them
+
+					 }
+			 }
 			harta[select1][select2] = 'A';
 			cout << "Agent from position (" << nr1 << "," << nr2 << ") has moved to position (" << select1 << "," << select2 << ")." << endl;//we say on which
 																																			//position he moves

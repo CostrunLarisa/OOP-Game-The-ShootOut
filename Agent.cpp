@@ -199,12 +199,12 @@ Agent Agent::attack(Agent* opponent)
 		if (Hammers* b = dynamic_cast<Hammers*>(weapon[k]))
 		{
 			
-			cout << "Agent on the position (" << opponent->getX() << "," << opponent->getY() << ") tries to attack!";
+			cout << "Agent on the position (" << this->getX() << "," <<this->getY() << ") tries to attack!";
 				for (int l = 0; l < getSFWeapons(); l++)
 				{
 					if (Scut* c = dynamic_cast<Scut*>(protect[l]))
 					{
-						
+						b->shootW();
 						c->shootH(b);
 						return *this;
 					}
@@ -216,11 +216,13 @@ Agent Agent::attack(Agent* opponent)
 							
 							if (power >= 12)			//if the opponent has a weaker combination or equal,he loses
 							{
+								b->shootW();
 								c->shootG(b);
 								return *this;
 							}
 							if (power==11){
 								Scut* p = new Scut();
+								b->shootW();
 								p->shootH(b);			//else that means he has hammer+scut,he shoots,he isthe winner
 								return *opponent;
 							}
@@ -231,17 +233,20 @@ Agent Agent::attack(Agent* opponent)
 					{
 						if (Cap* c = dynamic_cast<Cap*>(protect[l])) {
 							if (power >= 13)			//if the opponent has a weaker combination or equal,he loses
-							{
+							{	
+								b->shootW();
 								c->shootH(b);
 								return *this;
 							}
 							if (power==11){
 								Scut* p= new Scut();
+								b->shootW();
 								p->shootH(b);			//else that means he has hammer+scut,he shoots,he is the winner
 								return *opponent;
 							}
 							 if (power == 12) {
 								StoneGloves* p = new StoneGloves();
+								b->shootW();
 								p->shootH(b);
 								return *opponent;
 							}
@@ -258,13 +263,14 @@ Agent Agent::attack(Agent* opponent)
 			if (Guns* b = dynamic_cast<Guns*>(weapon[k]))
 			{
 				
-				cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
+				cout << "Agent on the position (" <<this->getX() << "," << this->getY() << ") tries to attack!";
 					for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
 						{
 							if (power >= 21)
 							{
+								b->shootW();
 								c->shootG(b);
 								return *this;
 
@@ -272,12 +278,14 @@ Agent Agent::attack(Agent* opponent)
 							if (power==11){
 								Scut* p= new Scut();
 								Hammers* h = new Hammers();
+								h->shootW();
 								p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
 								return *opponent;
 							}
 							if (power == 12) {
 								StoneGloves* p = new StoneGloves();
 								Hammers* h = new Hammers();
+								h->shootW();
 								p->shootH(h);
 								return *opponent;
 							}
@@ -291,24 +299,28 @@ Agent Agent::attack(Agent* opponent)
 								
 								if (power >= 22)
 								{
+									b->shootW();
 									c->shootG(b);
 									return *this;
 								}
 								if (power == 21)
 								{
 									Scut* p = new Scut();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 11) {
 									Scut* p = new Scut();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
 									return *opponent;
 								}
 								if (power == 12) {
 									StoneGloves* p = new StoneGloves();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);
 									return *opponent;
 								}
@@ -321,30 +333,35 @@ Agent Agent::attack(Agent* opponent)
 							{
 								if (power >= 23)
 								{
+									b->shootW();
 									c->shootG(b);
 									return *this;
 								}
 								if (power == 22)
 								{
 									StoneGloves* p = new StoneGloves();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 21)
 								{
 									Scut* p = new Scut();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 11) {
 									Scut* p = new Scut();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
 									return *opponent;
 								}
 								if (power == 12) {
 									StoneGloves* p = new StoneGloves();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);
 									return *opponent;
 								}
@@ -361,7 +378,7 @@ Agent Agent::attack(Agent* opponent)
 			if (Knives* b = dynamic_cast<Knives*>(weapon[k]))
 			{
 				
-					cout << "Agent on the position (" << getX() << "," << getY() << ") tries to attack!";
+					cout << "Agent on the position (" << this->getX() << "," << this->getY() << ") tries to attack!";
 					for (int l = 0; l < getSFWeapons(); l++)
 					{
 						if (Scut* c = dynamic_cast<Scut*>(protect[l]))
@@ -369,6 +386,7 @@ Agent Agent::attack(Agent* opponent)
 							
 							if (power >= 31)
 							{
+								b->shootW();
 								c->shootK(b);
 								return *this;
 								
@@ -376,30 +394,35 @@ Agent Agent::attack(Agent* opponent)
 							if (power == 23)
 							{
 								Cap* p = new Cap();
+								b->shootW();
 								p->shootG(b);
 								return *opponent;
 							}
 							if (power == 22)
-							{
+							{	
 								StoneGloves* p = new StoneGloves();
+								b->shootW();
 								p->shootG(b);
 								return *opponent;
 							}
 							if (power == 21)
 							{
 								Scut* p = new Scut();
+								b->shootW();
 								p->shootG(b);
 								return *opponent;
 							}
 							if (power == 11) {
 								Scut* p = new Scut();
 								Hammers* h = new Hammers();
+								h->shootW();
 								p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
 								return *opponent;
 							}
 							if (power == 12) {
 								StoneGloves* p = new StoneGloves();
 								Hammers* h = new Hammers();
+								h->shootW();
 								p->shootH(h);
 								return *opponent;
 							}
@@ -413,6 +436,7 @@ Agent Agent::attack(Agent* opponent)
 								
 								if (power >= 32)
 								{
+									b->shootW();
 									c->shootK(b);
 									return *this;
 									
@@ -421,36 +445,42 @@ Agent Agent::attack(Agent* opponent)
 								{
 									Knives* p = new Knives();
 									Scut* q = new Scut();
+									p->shootW();
 									q->shootK(p);
 									return *opponent;
 								}
 								if (power == 23)
 								{
 									Cap* p = new Cap();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								 if (power == 22)
 								{
 									StoneGloves* p = new StoneGloves();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								 if (power == 21)
 								{
 									Scut* p = new Scut();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								 if (power == 11) {
 									Scut* p = new Scut();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);			//else that means he has hammer+scut,he shoots,he is the winner
 									return *opponent;
 								}
 								 if (power == 12) {
 									StoneGloves* p = new StoneGloves();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);
 									return *opponent;
 								}
@@ -465,6 +495,7 @@ Agent Agent::attack(Agent* opponent)
 								{
 									Knives* p = new Knives();
 									StoneGloves* q = new StoneGloves();
+									p->shootW();
 									q->shootK(p);
 									return *opponent;
 								}
@@ -472,36 +503,42 @@ Agent Agent::attack(Agent* opponent)
 								{
 									Knives* p = new Knives();
 									Scut* q = new Scut();
+									p->shootW();
 									q->shootK(p);
 									return *opponent;
 								}
 								if (power == 23)
 								{
 									Cap* p = new Cap();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 22)
 								{
 									StoneGloves* p = new StoneGloves();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 21)
 								{
 									Scut* p = new Scut();
+									b->shootW();
 									p->shootG(b);
 									return *opponent;
 								}
 								if (power == 11) {
 									Scut* p = new Scut();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);		
 									return *opponent;
 								}
 								if (power == 12) {	
 									StoneGloves* p = new StoneGloves();
 									Hammers* h = new Hammers();
+									h->shootW();
 									p->shootH(h);
 									return *opponent;
 								}
