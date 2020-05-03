@@ -25,7 +25,7 @@ During the game, if the agent has more weapons, then he can choose wich one he w
 Each combination of weapons has its own method of shooting.\
 If one agent changes his position and on his road finds weapons,then it will be displayed when he found that weapon, for example:\
 **" Agent from position (0,3) found the weapon:hammer when we moved to position (0,4).**
-**Agent from position (0,3) found theweapon:knife when he moved to position (0,5).**
+**Agent from position (0,3) found the weapon:knife when he moved to position (0,5).**
 **Agent from position (0,3) has moved to position (0,5)."**\
 What you can see is the fact the the game shows the steps followed by the agent,then,i the end he shows the final position:
 **"initial position->final position."**\
