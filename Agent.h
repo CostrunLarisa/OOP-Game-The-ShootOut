@@ -14,16 +14,18 @@ class Agent
 	int pozitieOx;
 	int pozitieOy;
 	vector<Arma*> weapon;			// each Agent has by default a knife and a cap; he can collect weapons and self-defense weapons during the game
-	vector<Armuri*> protect;  
+	vector<Armuri*> protect;		//vector of weapons that protect the agent
 public:
 	Agent(int x=0,int y=0);
 	void steal(Agent*);				//if one agent kills another one he has the right to stole the weapons; he steals only the dead agent has something else than cap and knife
-	void Death();
+	void Death();					//method  which shows what weapons had one agent and clears the vectors
 	int getView();                  //returns the area of visibility
 	void chargeWeapon(Arma* a);		//method used if he collected a weapon 
-	void chargeDefWeapon(Armuri* a);
-	int getOpponentCombo(Agent*);	//method used if he collected a weapon that protects him
-	Agent attack(Agent*);
+	void chargeDefWeapon(Armuri* a);//method used if he collected a weapon that protects him
+	int getOpponentCombo(Agent*);	//method which returns the power of the weapon combination of an opponent
+	Agent attack(Agent*);			//method which compares the best weapons the current agent has with the weapons of the opponent;
+									//technically it is a battle,the one with the strongest combo uses his weapons and wins
+									//it is returned an object of Agent type
 	void show();					//if one agent is the winner,this method displays the weapons he collected during the game
 	void setX(int x);				//methods used to set the coordonates for a new position
 	void setY(int y);

@@ -26,7 +26,7 @@ public:
 	~Harta();
 	bool isFree(int , int,int);			//method that tells if one agent has other agents in his  area of visibility
 	void changePosition(int,int,int);	//method that changes the position of an agent
-	void show();						//method that shows the position of an agent
+	void show();						//method that shows the position of the winner
 	void deleteAgent(Agent* a,int,int);			//method for removing agents from the map
 	void collectWeapon(int, int,int,int,int);	//method used for collecting items from the map
 	int getSize() const;

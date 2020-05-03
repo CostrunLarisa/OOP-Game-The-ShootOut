@@ -58,11 +58,11 @@ void Agent::steal(Agent* a)												//we check if the agent has more weapons,
 	cout << endl;
 }
 
-void Agent::chargeWeapon(Arma* a)
+void Agent::chargeWeapon(Arma* a)  //one agent collect weapons
 {
 	this->weapon.push_back(a);
 }
-void Agent::chargeDefWeapon(Armuri* a)
+void Agent::chargeDefWeapon(Armuri* a) //one agent collect weapons that protect him
 {
 	this->protect.push_back(a);
 }

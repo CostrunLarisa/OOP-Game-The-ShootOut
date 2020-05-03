@@ -93,7 +93,7 @@ Harta::Harta(int x,int y):limitX(x),limitY(y),nrWeapons(0),nrAgents(0),nrProtect
 			}
 	}
 	nrWeapons = 0;
-	for (int i = 0; i < weapons.size(); i++)
+	for (int i = 0; i < weapons.size(); i++)		//we set the number of elements for each category from the map
 		nrWeapons++;
 	nrProtect = 0;
 	for (int i = 0; i < protection.size(); i++)
@@ -126,18 +126,19 @@ void Harta::collectWeapon(int z,int x, int y,int nr1,int nr2)		//this method col
 {
 	int ok = 0;
 	for (int i = 0; i < weapons.size();i++)
-			if (weapons[i]->getX() == x && weapons[i]->getY() == y)
+			if (weapons[i]->getX() == x && weapons[i]->getY() == y)			//if the position of one weapon from the map=the current position of the agent,
+																			//he collects
 			{
 				
 				cout << "Agent from position (" << nr1 << "," << nr2 << ") has collected the weapon:";
 				harta[nr1][nr2] = '*';
 				weapons[i]->afis();
 				cout << " when he moved to position ("<<x<<","<<y<<")!"<<endl;
-				agent[z]->chargeWeapon(weapons[i]);
+				agent[z]->chargeWeapon(weapons[i]);							//he charges the weapon in his vector
 				cout << "He has now: " << agent[z]->getWeapons() << " weapons." << endl;
-				weapons.erase(i + weapons.begin());
+				weapons.erase(i + weapons.begin());							//we erase the weapon from the map
 				ok = 1;
-				setWeapons();
+				setWeapons();												//we set the new numbers left on the map
 				cout << endl;
 				cout << endl;
 				cout << "There are only " << getWeapons() << "  weapons left to be found on the map!"<<endl;
@@ -146,7 +147,7 @@ void Harta::collectWeapon(int z,int x, int y,int nr1,int nr2)		//this method col
 				break;
 			}
 		
-	if(ok==0)
+	if(ok==0)	//if there are no weapons on those positions we check the same thing for the ones who protect
 	{
 				for (int i = 0; i < protection.size(); i++)
 				{
@@ -227,15 +228,6 @@ char Harta::getValue(int i,int j) const
 {
 	return harta[i][j];
 }
-ostream& operator<<(ostream& out, const Harta& h) {
-	for (int i = 0; i < h.getSize(); i++) {
-		for (int j = 0; j < h.getSize(); j++)
-			out << h.harta[i][j] << " ";
-		out << '\n';
-	}
-	out << '\n';
-	return out;
-}
 
 void Harta::show()
 {
@@ -243,31 +235,6 @@ void Harta::show()
 	cout << "from position: (" << agent[0]->getX() << "," << agent[0]->getY() << ").";
 }
 
-Harta::~Harta()
-{
-	for (int i = 0; i < limitX; i++)
-		delete harta[i];
-	delete harta;
-	if (getAgents() > 0)
-	{
-		for (int i = 0; i < agent.size(); i++)
-			agent.erase(i + agent.begin());
-	}
-	if (getWeapons() > 0)
-	{
-		for (int i = 0; i < weapons.size(); i++)
-			weapons.erase(i + weapons.begin());
-	}
-	if (getProtect() > 0)
-	{
-		for (int i = 0; i < protection.size(); i++)
-			protection.erase(i + protection.begin());
-	}
-	nrAgents = 0;
-	nrWeapons = 0;
-	nrProtect = 0;
-	limitX = limitY = 0;
-}
 bool Harta::isFree(int x, int y,int z)
 {
 	int n = getSize();
@@ -297,19 +264,20 @@ void Harta::changePosition(int nr1,int nr2,int i)
 
 	int n = getSize();
 	int arie = agent[i]->getView();
-	if (isFree(nr1, nr2, i) == 1)			//we search if there is another Agent
+	if (isFree(nr1, nr2, i) == 1)			//we search if there is another Agent in the area
 	{
 		int n = getSize();
 		int ok = 1;
-		int arie = agent[i]->getView();
+		int arie = agent[i]->getView(); //we get the area of visibility
 		int limit1 = nr1 + arie;
 		if (limit1 >= n)limit1 = n - 1;
 		int limit2 = nr2 + arie;
 		if (limit2 >= n)limit2 = n - 1;
 		int l = nr1+1;
 		int ok1 = 1;
-		for (l; l <= limit1; l++)
-				if (harta[l][nr2]== 'A' && l!=nr1)
+		for (l; l <= limit1; l++)					//if there are agents,then he searches for them in ANY directions,but the position 
+													//of the opponent must not be greater than the are of visibility
+				if (harta[l][nr2]== 'A' && l!=nr1)		
 				{
 					int poz;
 					
@@ -334,12 +302,12 @@ void Harta::changePosition(int nr1,int nr2,int i)
 
 					cout << "Hahaha,it seems like the agent from (" << l << "," << nr2 << ") didn't pay attention to who was around him!" << endl;
 
-					Agent* winner;
-					winner = &(agent[poz2]->attack(agent[poz]));
-					if (winner->getX() == l && winner->getY()==nr2)
+					Agent* winner;																				
+					winner = &(agent[poz2]->attack(agent[poz]));//we get the winner of the battle
+					if (winner->getX() == l && winner->getY()==nr2)//we see if the winner is the one who initiated the attack or not
 					{
 						harta[nr1][nr2] = '*';
-						deleteAgent(winner, nr1, nr2);
+						deleteAgent(winner, nr1, nr2);//we delete the loser
 					}
 					if (winner->getX() == nr1 && winner->getY()==nr2)
 					{
@@ -489,11 +457,11 @@ void Harta::changePosition(int nr1,int nr2,int i)
 						}
 						cout << "Hahaha,it seems like the agent from (" << nr1 << "," << j << ") didn't pay attention to who was around him!" << endl;
 						Agent* winner;
-						winner=&(agent[poz2]->attack(agent[poz]));
-						if (winner->getY() == j && winner->getX()==nr1) 
+						winner=&(agent[poz2]->attack(agent[poz]));									
+						if (winner->getY() == j && winner->getX()==nr1)						
 						{	
 							harta[nr1][nr2] = '*';
-							deleteAgent(winner,nr1, nr2);
+							deleteAgent(winner,nr1, nr2);											
 						}
 						 if (winner->getY() == nr2 && winner->getX()==nr1)
 						{
@@ -576,7 +544,9 @@ void Harta::changePosition(int nr1,int nr2,int i)
 			cout << endl;
 			agent[i]->setX(select1);
 			agent[i]->setY(select2);
-			if (nr1 == select1 && select2>nr2)																//our agent searches for weapons while changing position
+			if (nr1 == select1 && select2>nr2)																//our agent searches for weapons while changing position, before this
+																											//we determinate the direction he chose to go:N,S,E,V
+																											//in order to establish his 'road' to the position
 			{
 				for (int j = nr2 + 1; j < select2; j++)
 					if (harta[select1][j] != '*')collectWeapon(i, select1, j, nr1, nr2);
@@ -638,4 +608,38 @@ void Harta::changePosition(int nr1,int nr2,int i)
 
 	}
 		
+}
+ostream& operator<<(ostream& out, const Harta& h) {
+	for (int i = 0; i < h.getSize(); i++) {
+		for (int j = 0; j < h.getSize(); j++)
+			out << h.harta[i][j] << " ";
+		out << '\n';
+	}
+	out << '\n';
+	return out;
+}
+Harta::~Harta()	// we erase everything from the map
+{
+	for (int i = 0; i < limitX; i++)
+		delete harta[i];
+	delete harta;
+	if (getAgents() > 0)
+	{
+		for (int i = 0; i < agent.size(); i++)
+			agent.erase(i + agent.begin());
+	}
+	if (getWeapons() > 0)
+	{
+		for (int i = 0; i < weapons.size(); i++)
+			weapons.erase(i + weapons.begin());
+	}
+	if (getProtect() > 0)
+	{
+		for (int i = 0; i < protection.size(); i++)
+			protection.erase(i + protection.begin());
+	}
+	nrAgents = 0;
+	nrWeapons = 0;
+	nrProtect = 0;
+	limitX = limitY = 0;
 }
