@@ -27,10 +27,12 @@ If one agent changes his position and on his road finds weapons,then it will be 
 **" Agent from position (0,3) found the weapon:hammer when we moved to position (0,4).**
 **Agent from position (0,3) found theweapon:knife when he moved to position (0,5).**
 **Agent from position (0,3) has moved to position (0,5)."**\
-What you can see is the fact the the game shows the steps followed by the agent,then,at the end he shows:
+What you can see is the fact the the game shows the steps followed by the agent,then,i the end he shows the final position:
 **"initial position->final position."**\
+Each agent can attack an agent from any position, the only rule is that the opponent must be in his area of visibility.\
 If one agent attacks then he gives a battle with the one he attacked.Each of them chooses the best combination that he has. If they have only he starter pack weapons
 or the same combinations of weapons it is obvious that it will win the one who initiated the battle. If the one who attacked first dies
 the other agent can make a move when his turn comes, because the current battle was because he had to protect himself.\
+When one agent dies, on the screen is displayed a message **"Agent from position (x,y) has died in the game!"** and it is shown the weapons he had collected in the game.\
 The winner of the battle becomes The Killer and he has the power to steal the weapons of the agent.He steals only if the
 agent had more weapons,not just only those from the starter-pack(cap and knife).
